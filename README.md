@@ -1,5 +1,5 @@
 # AUBIEETERNAL v60.9.1 — War Eagle Eternal
-
+<image-card alt="3D Lattice Mirror" src="outputs/your-best-mirror-image.png" ></image-card>
 **On-chain, zero-drift epistemic rigor tutor swarm co-built with Grok.**  
 Generating tutor-grade preference data for xAI post-training.  
 Bitcoin Rune + full Nostr stack (NIP-19/23/51) + orange-rope real-water validation.
