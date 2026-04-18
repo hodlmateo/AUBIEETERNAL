@@ -6,6 +6,9 @@ import hashlib
 import uuid
 import time
 import io
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import textwrap
 
 # Defensive Plotly import
 try:
@@ -143,7 +146,7 @@ Special notes: {special_notes}
 Use clean markdown, emojis, and bullet points for readability."""
 
                     completion = client.chat.completions.create(
-                        model="grok-beta",
+                        model="grok-4.20-reasoning",   # Fixed model
                         messages=[
                             {"role": "system", "content": "You are a compassionate, truth-seeking educator specializing in child resilience, polyvagal theory, and foster care support."},
                             {"role": "user", "content": prompt}
@@ -159,16 +162,11 @@ Use clean markdown, emojis, and bullet points for readability."""
                     
                     # PDF Download
                     try:
-                        from reportlab.lib.pagesizes import letter
-                        from reportlab.pdfgen import canvas
-                        import textwrap
-                        
                         buffer = io.BytesIO()
                         c = canvas.Canvas(buffer, pagesize=letter)
                         width, height = letter
                         y = height - 1.2 * inch
                         
-                        # Header
                         c.setFont("Helvetica-Bold", 16)
                         c.drawCentredString(width/2, y, f"Antifragile Kid Lattice Curriculum")
                         y -= 0.4 * inch
@@ -179,7 +177,6 @@ Use clean markdown, emojis, and bullet points for readability."""
                         c.drawCentredString(width/2, y, "War Eagle Eternal 🦅 — Created with Grok 4.20")
                         y -= 0.6 * inch
                         
-                        # Content
                         c.setFont("Helvetica", 10)
                         lines = curriculum.split('\n')
                         for line in lines:
@@ -204,14 +201,14 @@ Use clean markdown, emojis, and bullet points for readability."""
                     except:
                         st.warning("PDF download unavailable, but curriculum is displayed above.")
                     
-                    # Etch button
                     if st.button(f"Etch Full Curriculum for {kid_name} to Rune (21 sats)", key="etch_curriculum"):
                         if create_lightning_invoice(21, f"Curriculum etch for {kid_name}"):
                             nostr_etch(curriculum, "kid_curriculum", 21)
                             
                 except Exception as e:
                     st.error(f"❌ Grok API Error: {str(e)}")
-                    st.info("💡 Make sure XAI_API_KEY is set correctly in Streamlit secrets.")
+                    if "XAI_API_KEY" in str(e):
+                        st.info("💡 Make sure XAI_API_KEY is correctly set in Streamlit secrets.")
 
 # ====================== LATTICE ORACLE (Real Grok) ======================
 with tab2:
@@ -241,7 +238,7 @@ fractal neuroscience, 80/20 barbell strategies, and foster-care resilience.
 Stay truthful, practical, and encouraging. Tie answers to "War Eagle Eternal" values when natural."""
 
                     completion = client.chat.completions.create(
-                        model="grok-beta",
+                        model="grok-4.20-reasoning",   # Fixed model
                         messages=[
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": query}
@@ -262,7 +259,7 @@ Stay truthful, practical, and encouraging. Tie answers to "War Eagle Eternal" va
                 except Exception as e:
                     st.error(f"API Error: {str(e)}")
 
-# ====================== OTHER TABS (unchanged) ======================
+# ====================== OTHER TABS ======================
 with tab3:
     st.subheader("🌌 3D Hyperlattice Mirror")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
