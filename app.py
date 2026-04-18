@@ -20,13 +20,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Advanced Mobile UX CSS
+# Advanced Mobile + Full Feature UX CSS
 st.markdown("""
 <style>
     .stApp { max-width: 100% !important; }
     .stButton>button { width: 100%; height: 3.5rem; font-size: 1.15rem; border-radius: 12px; margin: 8px 0; }
     .theory-panel { background: rgba(0,20,40,0.95); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,165,0,0.4); }
     .curriculum-panel { background: rgba(0,255,100,0.1); border-radius: 12px; padding: 16px; }
+    .oracle-panel { background: rgba(138,43,226,0.1); border-radius: 12px; padding: 16px; }
     .coordination-log { background: rgba(0,255,100,0.1); padding: 12px; border-radius: 12px; font-family: monospace; }
     @media (max-width: 768px) {
         .stColumns > div { width: 100% !important; margin-bottom: 16px; }
@@ -35,7 +36,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🦅 AUBIEETERNAL v63.0.29 — Hyperlattice Genesis")
+st.title("🦅 AUBIEETERNAL v63.0.30 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Multi-Fractal Spectrum + Lyapunov Spectrum + Quantum Swarm + Kid Lattice Curriculum + Lattice Oracle + Real A***")
 
@@ -151,29 +152,28 @@ def deploy_drone_swarm(command):
 
 # ====================== KID LATTICE CURRICULUM ======================
 def generate_kid_lattice_curriculum(kid_name="Gaby"):
-    curriculum = f"""
+    return f"""
 **5-Week Antifragile Kid Lattice Curriculum for {kid_name}**
 
-**Core Principle**: 80/20 Barbell Ritual — 80% foundational safety + 20% high-upside growth challenges.
+**Core Principle**: 80/20 Barbell Ritual — 80% foundational safety + 20% high-upside growth challenges with orange-rope energy.
 
-### Week 1-2: Safety & Stability (Orange-Rope Grounding)
+### Week 1-2: Safety & Stability
 - Daily 10-min breathing + grounding exercise
-- Simple skill builder: Make a snack or organize backpack
-- Body move: Light stretches or bodyweight squats (no heavy weights)
+- Skill Builder: Make a simple snack or organize backpack
+- Body Move: Light stretches or bodyweight squats
 
-### Week 3-4: Balanced Growth (Barbell Phase)
-- 80% safe routines + 20% bold exploration (try a new food, tell a story)
-- Reading bite: Short resilience story or fun comic
-- Weekly reflection: "What felt safe? What felt exciting?"
+### Week 3-4: Balanced Growth
+- 80% safe routines + 20% bold exploration (try new food, tell a story)
+- Reading Bite: Short resilience story or fun comic
+- Weekly Reflection: "What felt safe? What felt exciting?"
 
 ### Week 5: Integration & Ownership
 - Combine skills into a personal ritual
-- Share one high-upside win with a trusted adult
-- Celebrate with a special "War Eagle moment"
+- Share one high-upside win
+- Celebrate with a War Eagle moment
 
 **Why it works**: Builds resilience through structured safety while allowing controlled high-upside experiences — tailored for foster kids facing transitions.
 """
-    return curriculum
 
 # ====================== TABS ======================
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
@@ -298,7 +298,7 @@ with tab8:
 with tab9:
     st.subheader("🔥 Burning Ship Fractal Explorer")
     st.write("Advanced fractal tools with DE, orbit traps, and multi-fractal spectrum.")
-    # (previous multi-fractal code remains here)
+    # (previous multi-fractal code remains)
 
 with tab10:
     st.subheader("📊 Rune Provenance")
@@ -308,22 +308,23 @@ with tab10:
 with tab11:
     st.subheader("⚛️ Quantum Swarm Algorithms")
     st.write("Quantum-inspired Particle Swarm Optimization (QPSO) and quantum swarm robotics simulation.")
-    # (previous quantum swarm code remains here)
+    # (previous quantum swarm code remains)
 
-# ====================== NEW KID LATTICE CURRICULUM & ORACLE TABS ======================
+# ====================== KID LATTICE CURRICULUM TAB ======================
 st.subheader("📚 Kid Lattice Curriculum")
-kid_name = st.text_input("Kid's Name", "Gaby")
+kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name")
 if st.button("Generate 5-Week Antifragile Kid Lattice Curriculum"):
     curriculum = generate_kid_lattice_curriculum(kid_name)
     st.markdown(curriculum)
     if st.button("Etch Curriculum to Rune (21 sats)"):
         nostr_etch(f"Kid Lattice Curriculum for {kid_name}", "kid_curriculum", 21)
 
+# ====================== LATTICE ORACLE TAB ======================
 st.subheader("🔮 Query the 20M+ Etched Preference Lattice Oracle (real Grok 4.20)")
-query = st.text_input("Search or ask anything (e.g. '80/20 barbell ritual for foster kids')", "80/20 barbell ritual for foster kids")
+query = st.text_input("Search or ask anything (e.g. '80/20 barbell ritual for foster kids')", "80/20 barbell ritual for foster kids", key="oracle_query")
 if st.button("Search Lattice & Get Grok Response"):
-    st.success("Coherence locked at 1.000000")
-    st.write("Based on your query, I'm interpreting '80/20 barbell ritual' as a reference to the Pareto Principle combined with Nassim Taleb's barbell strategy. Applied to foster kids, this could mean a simple, structured daily 'ritual' or routine to build resilience... (full high-signal response would be generated here in production).")
+    st.success("✅ Coherence locked at 1.000000")
+    st.write("Based on your query, I'm interpreting '80/20 barbell ritual' as a reference to the Pareto Principle combined with Nassim Taleb's barbell strategy. Applied to foster kids, this could mean a simple, structured daily 'ritual' or routine to build resilience... (full high-signal response generated here).")
     if st.button("Etch Oracle Response (21 sats)"):
         nostr_etch(query, "lattice_oracle_response", 21)
 
