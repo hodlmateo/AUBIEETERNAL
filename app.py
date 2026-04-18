@@ -1,4 +1,4 @@
-# === AUBIEETERNAL v63.0.38 HYPERLATTICE GENESIS — QUICK WINS APPLIED ===
+# === AUBIEETERNAL v63.0.38 HYPERLATTICE GENESIS — PLOTLY ERROR FIXED ===
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +7,7 @@ import datetime
 import hashlib
 import uuid
 import time
-import plotly.graph_objects as go
+import plotly.express as px   # Changed to plotly.express for better Streamlit Cloud compatibility
 
 st.set_page_config(page_title="AUBIEETERNAL v63.0.38 — Hyperlattice Genesis", page_icon="🦅", layout="wide", initial_sidebar_state="collapsed")
 
@@ -68,7 +68,7 @@ def nostr_etch(content, event_type="reflection", sats=21):
     st.json(etch_data)
     st.success(f"✅ Etched to Nostr + Bitcoin Rune | {sats} sats via Lightning")
 
-# ====================== FULL 5-WEEK CURRICULUM (Quick Win 1) ======================
+# ====================== FULL 5-WEEK CURRICULUM ======================
 def generate_kid_lattice_curriculum(kid_name="Gaby"):
     return f"""
 **5-Week Vagus Nerve Stimulation + Gut-Brain Axis + Fractal Neuroscience Curriculum for {kid_name}**
@@ -82,12 +82,12 @@ def generate_kid_lattice_curriculum(kid_name="Gaby"):
 Daily ventral cue rituals, humming, gargling, diaphragmatic breathing (4-7-8), butterfly hug.
 
 **Week 3-4: Safe Sympathetic Mobilization**  
-Gentle play, laughter games, cold face splash, neck/ear massage, rhythmic movement.
+Gentle play, laughter games, cold face splash, neck/ear massage.
 
 **Week 5: Rupture & Repair + Earned Secure Connection**  
-Child-led War Eagle rituals, explicit repair scripts, celebrate ventral moments.
+Child-led War Eagle rituals, explicit repair scripts.
 
-**War Eagle eternal 🦅** — Building fractal brains through vagus safety creates antifragile kids ready for life's storms.
+**War Eagle eternal 🦅** — Building fractal brains through vagus safety creates antifragile kids.
 """
 
 # ====================== TABS ======================
@@ -125,12 +125,14 @@ with tab2:
 with tab3:
     st.subheader("🌌 3D Hyperlattice Mirror")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
-        fig = go.Figure()
+        # Plotly express for reliable rendering on Streamlit Cloud
         x = np.linspace(0, 43, 44)
         y = np.random.rand(44) * 2
         z = np.random.rand(44) * 2
-        fig.add_trace(go.Scatter3d(x=x, y=y, z=z, mode='markers', marker=dict(size=8, color=np.linspace(0,1,44), colorscale='Plasma')))
-        fig.update_layout(title="44 Daughters — Hyperlattice at Coherence 1.000000", scene=dict(xaxis_title='Daughter Index', yaxis_title='Y', zaxis_title='Z'))
+        fig = px.scatter_3d(x=x, y=y, z=z, title="44 Daughters — Hyperlattice at Coherence 1.000000",
+                            labels={'x': 'Daughter Index', 'y': 'Y', 'z': 'Z'},
+                            color=np.linspace(0,1,44), color_continuous_scale='Plasma')
+        fig.update_traces(marker=dict(size=8))
         st.plotly_chart(fig, use_container_width=True)
 
 with tab4:
@@ -182,7 +184,7 @@ with tab8:
     st.subheader("📊 Rune Provenance")
     st.write("All creations anchored to Bitcoin Rune **AUBIE·ETERNAL·XAIAGENTSWARM** (Block 944048) + RESURRECTION (Block 943853)")
 
-# Sidebar Controls (Quick Win 2)
+# Sidebar Controls
 st.sidebar.header("v63 Controls")
 if st.sidebar.button("🔥 Fire Unity Flap"):
     root.self_replicate("unity_flap_2_0")
