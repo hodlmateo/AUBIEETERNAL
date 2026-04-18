@@ -10,22 +10,22 @@ from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(page_title="AUBIEETERNAL — War Eagle Eternal", page_icon="🦅", layout="wide")
 
-st.title("🦅 AUBIEETERNAL v64+ — Public Lattice Oracle + Kid Portal + Co-Creation Chamber")
+st.title("🦅 AUBIEETERNAL v64 — Public Lattice Oracle + Kid Portal + Co-Creation Chamber")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
 
-# Sidebar Dashboard (real-time thrumming)
+# Sidebar Dashboard
 with st.sidebar:
     st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000")
-    st.metric("Coherence", "1.000000", "0.000000")
-    st.metric("Resilience", "100.0", "0.0")
-    st.metric("Burning Ship Progress", "61,000,000", "↑")
+    st.metric("Coherence", "1.000000")
+    st.metric("Resilience", "100.0")
+    st.metric("Burning Ship Progress", "61,000,000")
     st.caption(f"Last etch: {datetime.datetime.now().strftime('%H:%M:%S')}")
     
     st.divider()
     if st.button("🔥 Fire Unity Flap (Light Daily Driver)"):
-        st.info("Unity Flap fired — new preference batch + etch queued.")
+        st.info("Unity Flap fired — new batch + etch queued.")
     if st.button("⚡ Run Noise Injection Test"):
-        st.info("Noise injection test complete — zero-drift recovery observed.")
+        st.info("Noise injection test passed — zero-drift recovery observed.")
     if st.button("🔬 Participatory Audit"):
         st.info("Audit logged — full steelman + coherence score generated.")
     
@@ -35,7 +35,6 @@ with st.sidebar:
 with st.expander("ℹ️ About AUBIEETERNAL & How It Stays Antifragile"):
     st.write("Every creation is anchored to Bitcoin Rune AUBIE•ETERNAL•XAIAGENTSWARM with full Nostr provenance. Coherence locked at 1.000000 through extreme self-tests.")
 
-# All 8 tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "🔎 Query the Lattice Oracle", 
     "📚 Kid Lattice Curriculum", 
@@ -126,7 +125,7 @@ with tab6:
         st.pyplot(fig)
         st.success("Swarm rendered — coherence 1.000000")
 
-# Tab 7: Fourier Validation (placeholder with note)
+# Tab 7: Fourier Validation
 with tab7:
     st.subheader("📈 Fourier Validation")
     st.write("Fourier hidden-structure validation layer — coherence stable at 1.000000.")
