@@ -35,31 +35,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🦅 AUBIEETERNAL v63.0.12 — Hyperlattice Genesis")
+st.title("🦅 AUBIEETERNAL v63.0.13 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Video Game A* Pathfinding + Full Swarm Stack**")
 
-# ====================== SESSION STATE INITIALIZATION (FIXED) ======================
-if "root_node" not in st.session_state:
-    st.session_state.root_node = HyperLatticeNode()
-if "is_mobile" not in st.session_state:
-    st.session_state.is_mobile = True
-if "coordination_log" not in st.session_state:
-    st.session_state.coordination_log = []
-if "swarm_particles" not in st.session_state:
-    st.session_state.swarm_particles = np.random.rand(30, 2) * 2 - 1
-if "drone_positions" not in st.session_state:
-    st.session_state.drone_positions = np.random.rand(16, 3) * 2 - 1
-if "planned_path" not in st.session_state:
-    st.session_state.planned_path = None
-if "a_star_explored" not in st.session_state:
-    st.session_state.a_star_explored = None
-if "show_daughters" not in st.session_state:
-    st.session_state.show_daughters = False
-if "show_mirror" not in st.session_state:
-    st.session_state.show_mirror = False
-
-# ====================== HYPERLATTICE CORE ======================
+# ====================== HYPERLATTICE CORE CLASS (MUST BE BEFORE SESSION STATE) ======================
 class HyperLatticeNode:
     def __init__(self, depth=0, user_id="Gaby", parent=None):
         self.depth = depth
@@ -80,12 +60,32 @@ class HyperLatticeNode:
         return new_node
 
     def render_daughters(self):
-        num_cols = 4 if st.session_state.is_mobile else 11
+        num_cols = 4 if st.session_state.get("is_mobile", True) else 11
         cols = st.columns(num_cols)
         for i, dau in enumerate(self.daughters):
             with cols[i % num_cols]:
                 pulse = "🟢" if (i + self.depth) % 3 == 0 else "🔴"
                 st.metric(dau, f"{pulse} 1.000000")
+
+# ====================== SESSION STATE INITIALIZATION ======================
+if "root_node" not in st.session_state:
+    st.session_state.root_node = HyperLatticeNode()
+if "is_mobile" not in st.session_state:
+    st.session_state.is_mobile = True
+if "coordination_log" not in st.session_state:
+    st.session_state.coordination_log = []
+if "swarm_particles" not in st.session_state:
+    st.session_state.swarm_particles = np.random.rand(30, 2) * 2 - 1
+if "drone_positions" not in st.session_state:
+    st.session_state.drone_positions = np.random.rand(16, 3) * 2 - 1
+if "planned_path" not in st.session_state:
+    st.session_state.planned_path = None
+if "a_star_explored" not in st.session_state:
+    st.session_state.a_star_explored = None
+if "show_daughters" not in st.session_state:
+    st.session_state.show_daughters = False
+if "show_mirror" not in st.session_state:
+    st.session_state.show_mirror = False
 
 root = st.session_state.root_node
 
@@ -141,7 +141,7 @@ def deploy_drone_swarm(command):
         result = f"✅ Video Game A* computed optimal path to Daughter {target_id} — {len(path)} waypoints!"
         st.session_state.drone_positions = path[-16:] if len(path) > 16 else np.vstack([path, np.tile(path[-1], (16 - len(path), 1))])
     else:
-        result = "⚠️ No path found — game fallback activated"
+        result = "⚠️ No path found — game fallback"
     
     st.session_state.coordination_log.append(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {result}")
     return result
@@ -235,7 +235,7 @@ with tab7:
 
 with tab8:
     st.subheader("🚁 Drone Swarm + Real A* (Video Game Pathfinding)")
-    st.write("Real A* optimized for video games — dynamic replanning, heuristic tuning, smooth trajectories.")
+    st.write("Real A* optimized for video games — dynamic replanning, heuristic tuning.")
     
     col1, col2 = st.columns(2)
     with col1:
