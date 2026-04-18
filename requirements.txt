@@ -1,4 +1,3 @@
 streamlit
-numpy
+openai
 matplotlib
-plotly  # if using interactive plots
