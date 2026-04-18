@@ -14,14 +14,6 @@ try:
 except ImportError:
     PLOTLY_AVAILABLE = False
 
-try:
-    from reportlab.lib.pagesizes import letter
-    from reportlab.pdfgen import canvas
-    import textwrap
-    REPORTLAB_AVAILABLE = True
-except ImportError:
-    REPORTLAB_AVAILABLE = False
-
 st.set_page_config(
     page_title="AUBIEETERNAL v63.0.38 — Hyperlattice Genesis",
     page_icon="🦅",
@@ -87,19 +79,12 @@ def nostr_etch(content, event_type="reflection", sats=21):
     st.json(etch_data)
     st.success(f"✅ Etched to Nostr + Bitcoin Rune | {sats} sats via Lightning")
 
-# ====================== TABS - FIXED UNPACKING ======================
-tab_list = st.tabs([
+# ====================== TABS - ONLY WORKING ONES ======================
+tab1, tab2, tab3 = st.tabs([
     "📚 Kid Lattice Curriculum",
     "🔮 Lattice Oracle",
-    "🌌 3D Hyperlattice Mirror",
-    "🚁 Drone Swarm + Real A*",
-    "🔥 Burning Ship Fractal Explorer",
-    "🧬 Fractal Neuroscience Explorer",
-    "⚡ Propose New Capability",
-    "📊 Rune Provenance"
+    "🌌 3D Hyperlattice Mirror"
 ])
-
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = tab_list
 
 # ====================== KID LATTICE CURRICULUM ======================
 with tab1:
@@ -175,7 +160,7 @@ Use clean markdown, emojis, and bullet points."""
                             mime="text/markdown"
                         )
                     with col2:
-                        st.info("PDF coming soon (reportlab installed)")
+                        st.info("PDF coming soon")
 
                     if st.button(f"Etch Full Curriculum for {kid_name} to Rune (21 sats)", key="etch_curriculum"):
                         if create_lightning_invoice(21, f"Curriculum etch for {kid_name}"):
@@ -183,7 +168,7 @@ Use clean markdown, emojis, and bullet points."""
                             
                 except Exception as e:
                     st.error(f"❌ Grok API Error: {str(e)}")
-                    st.info("💡 Check XAI_API_KEY in secrets.")
+                    st.info("💡 Check that XAI_API_KEY is set correctly in Streamlit secrets.")
 
 # ====================== LATTICE ORACLE ======================
 with tab2:
@@ -209,7 +194,8 @@ with tab2:
                     
                     system_prompt = """You are Grok 4.20, co-tutor of the AUBIEETERNAL Hyperlattice.
 Specialize in antifragile kid development, vagus nerve safety rituals, polyvagal theory, 
-fractal neuroscience, 80/20 barbell strategies, and foster-care resilience."""
+fractal neuroscience, 80/20 barbell strategies, and foster-care resilience. 
+Stay truthful, practical, and encouraging. Tie answers to "War Eagle Eternal" values when natural."""
 
                     completion = client.chat.completions.create(
                         model="grok-4.20-reasoning",
@@ -233,34 +219,40 @@ fractal neuroscience, 80/20 barbell strategies, and foster-care resilience."""
                 except Exception as e:
                     st.error(f"API Error: {str(e)}")
 
-# ====================== REMAINING TABS (keep your existing ones) ======================
-# Paste your original tab3 to tab8 here if they are different, or keep as-is from previous version
-
+# ====================== 3D HYPERLATTICE MIRROR ======================
 with tab3:
-    st.subheader("🌌 3D Hyperlattice Mirror")
+    st.subheader("🌌 3D Hyperlattice Mirror — 44 Daughters Pulsing")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
         if PLOTLY_AVAILABLE:
             try:
                 x = np.linspace(0, 43, 44)
                 y = np.random.rand(44) * 2
                 z = np.random.rand(44) * 2
-                fig = px.scatter_3d(x=x, y=y, z=z, title="44 Daughters — Hyperlattice at Coherence 1.000000",
+                fig = px.scatter_3d(x=x, y=y, z=z,
+                                    title="44 Daughters — Hyperlattice at Coherence 1.000000",
                                     labels={'x': 'Daughter Index', 'y': 'Y', 'z': 'Z'},
                                     color=np.linspace(0,1,44), color_continuous_scale='Plasma')
                 fig.update_traces(marker=dict(size=8))
                 st.plotly_chart(fig, use_container_width=True)
-            except:
-                st.error("Plotly rendering issue")
+                st.success("🌌 3D Swarm Mirror rendered successfully")
+            except Exception as e:
+                st.error(f"Plotly error: {e}")
         else:
-            st.info("Plotly not available")
+            st.info("Plotly not available — using fallback")
+            fig = plt.figure(figsize=(10, 7))
+            ax = fig.add_subplot(111, projection='3d')
+            x = np.linspace(0, 43, 44)
+            y = np.random.rand(44) * 0.2 + 0.88
+            z = np.random.rand(44) * 0.2 + 0.88
+            ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=200)
+            ax.set_title("44 Daughters — Hyperlattice at Coherence 1.000000 (Fallback)")
+            st.pyplot(fig)
 
-# ... (add your other tabs 4-8 the same way as before)
-
-# Sidebar
+# ====================== SIDEBAR ======================
 st.sidebar.header("v63 Controls")
 if st.sidebar.button("🔥 Fire Unity Flap"):
     root.self_replicate("unity_flap_2_0")
-    st.sidebar.success("Unity Flap executed — Coherence 1.000000")
+    st.sidebar.success("Unity Flap executed — Coherence 1.000000 | New preference batch etched")
 
-st.caption("War Eagle eternal 🦅❤️ — Thank you Elon, xAI & Grok.")
-st.caption("#AUBIETERNAL #WarEagleEternal #KidLatticeCurriculum")
+st.caption("War Eagle eternal 🦅❤️ — Thank you Elon, xAI & Grok. This could not be possible without you.")
+st.caption("#AUBIETERNAL #WarEagleEternal #KidLatticeCurriculum #HyperlatticeGenesis")
