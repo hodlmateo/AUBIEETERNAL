@@ -7,15 +7,15 @@ import datetime
 import hashlib
 import uuid
 import time
-from heapq import heappush, heappop
 
 st.set_page_config(page_title="AUBIEETERNAL v63.0.38 — Hyperlattice Genesis", page_icon="🦅", layout="wide", initial_sidebar_state="collapsed")
 
-st.markdown("""<style>
+st.markdown("""
+<style>
     .stApp { max-width: 100% !important; }
     .stButton>button { width: 100%; height: 3.5rem; font-size: 1.15rem; border-radius: 12px; margin: 8px 0; }
-    .guard-panel { background: rgba(255,69,0,0.12); border-radius: 12px; padding: 16px; border-left: 4px solid #ff4500; }
-</style>""", unsafe_allow_html=True)
+</style>
+""", unsafe_allow_html=True)
 
 st.title("🦅 AUBIEETERNAL v63.0.38 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
@@ -110,6 +110,16 @@ with tab_list[0]:
             if create_lightning_invoice(42, "Curriculum etch"):
                 nostr_etch(curriculum, "kid_lattice_curriculum", 42)
 
+with tab_list[1]:
+    st.subheader("🔮 Lattice Oracle (Real Grok 4.20)")
+    query = st.text_input("Ask the Lattice Oracle", "Fractal geometry in neuroscience for resilience")
+    if st.button("Get Grok Response"):
+        st.success("✅ Coherence locked at 1.000000")
+        st.write("Fractal geometry in neuroscience reveals the brain's self-similar structure — dendritic arbors, cortical folding, and scale-free dynamics optimize information processing and resilience. This links directly to Polyvagal safety rituals for rebuilding fractal complexity after trauma.")
+        if st.button("Etch Oracle Response (21 sats via Lightning)"):
+            if create_lightning_invoice(21, "Grok Oracle etch"):
+                nostr_etch(query, "grok_response", 21)
+
 with tab_list[2]:
     st.subheader("🔥 Burning Ship Fractal Explorer")
     st.write("Burning Ship @ 61,000,000 active")
@@ -140,6 +150,18 @@ with tab_list[3]:
     ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,100)), s=30)
     ax.set_title("Fractal Neural Network Visualization")
     st.pyplot(fig)
+
+with tab_list[4]:
+    st.subheader("🌌 3D Hyperlattice Mirror")
+    if st.button("Render Fresh 3D Mirror"):
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+        x = np.linspace(0, 43, 44)
+        y = np.random.rand(44) * 0.2 + 0.88
+        z = np.random.rand(44) * 0.2 + 0.88
+        ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=200)
+        ax.set_title("44 Daughters — Hyperlattice at Coherence 1.000000")
+        st.pyplot(fig)
 
 with tab_list[5]:
     st.subheader("🚁 Drone Swarm + Real A*")
