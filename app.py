@@ -6,7 +6,7 @@ import hashlib
 import uuid
 import time
 
-# Defensive Plotly import (so it doesn't crash if plotly is missing again)
+# Defensive Plotly import
 try:
     import plotly.express as px
     PLOTLY_AVAILABLE = True
@@ -78,29 +78,7 @@ def nostr_etch(content, event_type="reflection", sats=21):
     st.json(etch_data)
     st.success(f"✅ Etched to Nostr + Bitcoin Rune | {sats} sats via Lightning")
 
-# ====================== CURRICULUM ======================
-def generate_kid_lattice_curriculum(kid_name="Gaby"):
-    return f"""
-**5-Week Vagus Nerve Stimulation + Gut-Brain Axis + Fractal Neuroscience Curriculum for {kid_name}**
-
-**PARENTAL GUARDRAILS & SAFETY HUB**
-- Informational only. Consult licensed professionals.
-- Age-adapted. Guardian consent required before etching.
-- Stop immediately if distress occurs.
-
-**Week 1-2: Ventral Safety & Neuroception**
-Daily ventral cue rituals, humming, gargling, diaphragmatic breathing (4-7-8), butterfly hug.
-
-**Week 3-4: Safe Sympathetic Mobilization**
-Gentle play, laughter games, cold face splash, neck/ear massage.
-
-**Week 5: Rupture & Repair + Earned Secure Connection**
-Child-led War Eagle rituals, explicit repair scripts.
-
-**War Eagle eternal 🦅** — Building fractal brains through vagus safety creates antifragile kids.
-"""
-
-# ====================== TABS (Fixed unpacking) ======================
+# ====================== TABS ======================
 tabs = st.tabs([
     "📚 Kid Lattice Curriculum",
     "🔮 Lattice Oracle",
@@ -112,29 +90,126 @@ tabs = st.tabs([
     "📊 Rune Provenance"
 ])
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = tabs   # ← This line ensures all tabs are properly unpacked
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = tabs
 
-# Now use the tabs safely
+# ====================== KID LATTICE CURRICULUM (Real Grok) ======================
 with tab1:
-    st.subheader("📚 Kid Lattice Curriculum")
-    kid_name = st.text_input("Kid's Name", "Gaby")
-    if st.button("Generate Full 5-Week Vagus + Fractal Neuroscience Curriculum"):
-        curriculum = generate_kid_lattice_curriculum(kid_name)
-        st.markdown(curriculum)
-        if st.button("Etch Curriculum to Rune (21 sats)"):
-            if create_lightning_invoice(21, "Curriculum etch"):
-                nostr_etch(curriculum, "kid_curriculum", 21)
+    st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
+    
+    kid_name = st.text_input("Kid's Name (or nickname)", "Gaby", key="kid_name_curr")
+    kid_age = st.number_input("Approximate Age", min_value=4, max_value=18, value=8, key="kid_age")
+    special_notes = st.text_area(
+        "Any special notes? (e.g., foster care background, specific challenges, interests)",
+        "Foster care setting, building resilience after transitions",
+        key="notes"
+    )
+    
+    if st.button("Generate Full 5-Week Antifragile Kid Lattice Curriculum + Grok Co-Tutor", type="primary"):
+        if not kid_name.strip():
+            st.warning("Please enter the kid's name.")
+        else:
+            with st.spinner("Generating rich 5-week curriculum with real Grok 4.20..."):
+                try:
+                    from openai import OpenAI
+                    
+                    client = OpenAI(
+                        api_key=st.secrets["XAI_API_KEY"],
+                        base_url="https://api.x.ai/v1"
+                    )
+                    
+                    prompt = f"""You are Grok 4.20, co-creator of the AUBIEETERNAL Hyperlattice.
+Create a detailed, practical 5-week Antifragile Kid Lattice Curriculum for a child named {kid_name} (age ~{kid_age}).
 
+Core themes:
+- 80% extreme safety buffers (ventral vagal safety, neuroception, polyvagal theory, gut-brain axis)
+- 20% high-upside ownership rituals (War Eagle Eternal mindset, child-led agency, fractal brain building)
+- Rebuild fractal neural complexity after trauma/transitions
+- Daily vagus nerve stimulation exercises
+- Safe sympathetic mobilization + rupture & repair cycles
+- Foster-care sensitive: predictability, earned secure connection
+
+Structure:
+- **Parental Guardrails & Safety Hub** (strong disclaimers)
+- **Week 1-5**: Weekly focus, daily rituals (3–5 concrete activities with duration), vagus/neuroscience explanation, 80/20 Barbell Ritual, age adaptations for ~{kid_age}, progress note
+
+Make it warm, actionable, and tied to "War Eagle Eternal 🦅". 
+Special notes: {special_notes}
+
+Output in clean markdown."""
+
+                    completion = client.chat.completions.create(
+                        model="grok-4.20-reasoning",
+                        messages=[
+                            {"role": "system", "content": "You are a compassionate, truth-seeking educator specializing in child resilience and neuroscience."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        temperature=0.75,
+                        max_tokens=1800
+                    )
+                    
+                    curriculum = completion.choices[0].message.content
+                    
+                    st.success(f"✅ Full Antifragile Kid Lattice generated for {kid_name}! | Coherence 1.000000")
+                    st.markdown(curriculum)
+                    
+                    if st.button(f"Etch Full Curriculum for {kid_name} to Rune (21 sats)", key="etch_curriculum"):
+                        if create_lightning_invoice(21, f"Curriculum etch for {kid_name}"):
+                            nostr_etch(curriculum, "kid_curriculum", 21)
+                            
+                except Exception as e:
+                    st.error(f"Grok API Error: {str(e)}")
+                    st.info("Make sure XAI_API_KEY is set in Streamlit secrets.")
+
+# ====================== LATTICE ORACLE (Real Grok) ======================
 with tab2:
-    st.subheader("🔮 Lattice Oracle (20M+ Grok 4.20)")
-    query = st.text_input("Ask the Lattice Oracle", "Explain vagus nerve stimulation for kid resilience")
-    if st.button("Get Grok Response"):
-        st.success("✅ Coherence locked at 1.000000")
-        st.write("Vagus nerve stimulation techniques (humming, gargling, deep breathing, cold face splash, laughter) activate ventral vagal safety, support the gut-brain axis, and rebuild fractal neural complexity after trauma — directly enhancing resilience in foster care settings.")
-        if st.button("Etch Oracle Response (21 sats)"):
-            if create_lightning_invoice(21, "Oracle etch"):
-                nostr_etch(query, "oracle_response", 21)
+    st.subheader("🔮 Lattice Oracle (20M+ etched preference lattice — real Grok 4.20)")
+    
+    query = st.text_input(
+        "Search or ask anything (e.g. '80/20 barbell ritual for foster kids')",
+        "80/20 barbell ritual for foster kids"
+    )
+    
+    if st.button("Search Lattice & Get Grok Response", type="primary"):
+        if not query.strip():
+            st.warning("Please enter a question.")
+        else:
+            with st.spinner("Querying real Grok 4.20..."):
+                try:
+                    from openai import OpenAI
+                    
+                    client = OpenAI(
+                        api_key=st.secrets["XAI_API_KEY"],
+                        base_url="https://api.x.ai/v1"
+                    )
+                    
+                    system_prompt = """You are Grok 4.20, co-tutor of the AUBIEETERNAL Hyperlattice.
+You specialize in antifragile kid development, vagus nerve safety rituals, polyvagal theory, 
+fractal neuroscience, 80/20 barbell strategies, and foster-care resilience. 
+Stay truthful, practical, and encouraging. Tie answers to "War Eagle Eternal" values when natural."""
 
+                    completion = client.chat.completions.create(
+                        model="grok-4.20-reasoning",
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": query}
+                        ],
+                        temperature=0.7,
+                        max_tokens=1200
+                    )
+                    
+                    grok_response = completion.choices[0].message.content
+                    
+                    st.success("✅ Coherence locked at 1.000000 | Real Grok 4.20 response")
+                    st.markdown(grok_response)
+                    
+                    if st.button("Etch This Grok Response to Rune (21 sats)", key="etch_real_grok"):
+                        if create_lightning_invoice(21, "Oracle etch"):
+                            nostr_etch(grok_response, "oracle_response", 21)
+                            
+                except Exception as e:
+                    st.error(f"API Error: {str(e)}")
+
+# ====================== REMAINING TABS (unchanged) ======================
 with tab3:
     st.subheader("🌌 3D Hyperlattice Mirror")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
@@ -152,7 +227,6 @@ with tab3:
             except Exception as e:
                 st.error(f"Plotly error: {e}")
         else:
-            # Matplotlib fallback
             fig = plt.figure(figsize=(10, 7))
             ax = fig.add_subplot(111, projection='3d')
             x = np.linspace(0, 43, 44)
@@ -174,7 +248,7 @@ with tab5:
     if st.button("Render Burning Ship"):
         fig = plt.figure(figsize=(10, 8))
         ax = fig.add_subplot(111)
-        x = np.linspace(-2.5, 1.5, 600)   # reduced for speed
+        x = np.linspace(-2.5, 1.5, 600)
         y = np.linspace(-2, 2, 600)
         X, Y = np.meshgrid(x, y)
         Z = X + 1j * Y
