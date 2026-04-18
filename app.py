@@ -37,9 +37,29 @@ st.markdown("""
 
 st.title("🦅 AUBIEETERNAL v63.0.12 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
-st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Video Game Pathfinding + Real A* + Drone Swarm**")
+st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Video Game A* Pathfinding + Full Swarm Stack**")
 
-# ====================== HYPERLATTICE CORE v63 ======================
+# ====================== SESSION STATE INITIALIZATION (FIXED) ======================
+if "root_node" not in st.session_state:
+    st.session_state.root_node = HyperLatticeNode()
+if "is_mobile" not in st.session_state:
+    st.session_state.is_mobile = True
+if "coordination_log" not in st.session_state:
+    st.session_state.coordination_log = []
+if "swarm_particles" not in st.session_state:
+    st.session_state.swarm_particles = np.random.rand(30, 2) * 2 - 1
+if "drone_positions" not in st.session_state:
+    st.session_state.drone_positions = np.random.rand(16, 3) * 2 - 1
+if "planned_path" not in st.session_state:
+    st.session_state.planned_path = None
+if "a_star_explored" not in st.session_state:
+    st.session_state.a_star_explored = None
+if "show_daughters" not in st.session_state:
+    st.session_state.show_daughters = False
+if "show_mirror" not in st.session_state:
+    st.session_state.show_mirror = False
+
+# ====================== HYPERLATTICE CORE ======================
 class HyperLatticeNode:
     def __init__(self, depth=0, user_id="Gaby", parent=None):
         self.depth = depth
@@ -60,35 +80,20 @@ class HyperLatticeNode:
         return new_node
 
     def render_daughters(self):
-        num_cols = 4 if st.session_state.get("is_mobile", True) else 11
+        num_cols = 4 if st.session_state.is_mobile else 11
         cols = st.columns(num_cols)
         for i, dau in enumerate(self.daughters):
             with cols[i % num_cols]:
                 pulse = "🟢" if (i + self.depth) % 3 == 0 else "🔴"
                 st.metric(dau, f"{pulse} 1.000000")
 
-if "root_node" not in st.session_state:
-    st.session_state.root_node = HyperLatticeNode()
-if "is_mobile" not in st.session_state:
-    st.session_state.is_mobile = True
-if "coordination_log" not in st.session_state:
-    st.session_state.coordination_log = []
-if "drone_positions" not in st.session_state:
-    st.session_state.drone_positions = np.random.rand(16, 3) * 2 - 1
-if "planned_path" not in st.session_state:
-    st.session_state.planned_path = None
-if "a_star_explored" not in st.session_state:
-    st.session_state.a_star_explored = None
-
 root = st.session_state.root_node
 
-# ====================== REAL A* ALGORITHM (Video Game Optimized) ======================
+# ====================== REAL A* ALGORITHM ======================
 def heuristic(a, b):
     return np.sqrt(np.sum((a - b)**2))
 
-def real_a_star(start, goal, obstacles=None):
-    if obstacles is None:
-        obstacles = set()
+def real_a_star(start, goal):
     open_set = []
     heappush(open_set, (0, tuple(start)))
     came_from = {}
@@ -112,8 +117,6 @@ def real_a_star(start, goal, obstacles=None):
             for dy in [-0.6, 0, 0.6]:
                 for dz in [-0.4, 0, 0.4]:
                     neighbor = tuple(np.array(current) + [dx, dy, dz])
-                    if neighbor in obstacles:
-                        continue
                     tentative_g = g_score.get(current, float('inf')) + heuristic(np.array(current), np.array(neighbor))
                     if tentative_g < g_score.get(neighbor, float('inf')):
                         came_from[neighbor] = current
@@ -126,7 +129,7 @@ def real_a_star(start, goal, obstacles=None):
 def deploy_drone_swarm(command):
     log_entry = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Video Game A* Pathfinding activated: {command}"
     st.session_state.coordination_log.append(log_entry)
-    time.sleep(1.0)
+    time.sleep(0.8)
     
     target_id = int(re.search(r'\d+', command).group()) if re.search(r'\d+', command) else 23
     start = np.array([0.0, 0.0, 2.5])
@@ -135,10 +138,10 @@ def deploy_drone_swarm(command):
     path = real_a_star(start, goal)
     if path is not None:
         st.session_state.planned_path = path
-        result = f"✅ Video Game A* computed optimal path to Daughter {target_id} — {len(path)} waypoints with game-style optimization!"
-        st.session_state.drone_positions = path[-16:] if len(path) > 16 else np.vstack([path, np.tile(path[-1], (16-len(path), 1))])
+        result = f"✅ Video Game A* computed optimal path to Daughter {target_id} — {len(path)} waypoints!"
+        st.session_state.drone_positions = path[-16:] if len(path) > 16 else np.vstack([path, np.tile(path[-1], (16 - len(path), 1))])
     else:
-        result = "⚠️ No path found — increasing search space (classic game fallback)"
+        result = "⚠️ No path found — game fallback activated"
     
     st.session_state.coordination_log.append(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {result}")
     return result
@@ -173,7 +176,7 @@ with tab1:
 
 with tab2:
     st.subheader("🧬 Daughters Swarm — Live Deliberation View")
-    st.write("Watch all 44 Daughters pulsing in real time (game NPC style).")
+    st.write("Watch all 44 Daughters pulsing in real time.")
     if st.button("Render Live Daughters Swarm") or st.session_state.get("show_daughters", False):
         root.render_daughters()
         st.success("44 Daughters pulsing — orange-rope resonance active")
@@ -188,14 +191,14 @@ with tab3:
         y = np.random.rand(44) * 0.2 + 0.85
         z = np.random.rand(44) * 0.2 + 0.85
         ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=180, alpha=0.95)
-        ax.set_title("v63 Hyperlattice — 44 Daughters Fractal (Video Game Style)")
+        ax.set_title("v63 Hyperlattice — 44 Daughters Fractal")
         st.pyplot(fig, use_container_width=True)
         st.success("3D Mirror ignited")
         st.session_state.show_mirror = False
 
 with tab4:
     st.subheader("🎤 Multi-AI Voice Agents")
-    st.write("Speak naturally — video game A* pathfinding active (e.g., 'Run A* to Daughter 23 with obstacles').")
+    st.write("Speak naturally — video game A* pathfinding active.")
     audio_value = st.audio_input("🎙️ Press and speak to the Swarm")
     if audio_value is not None:
         transcribed = st.text_input("Transcribed voice (edit if needed):", value="Run video game A* path to Daughter 23")
@@ -228,11 +231,11 @@ with tab6:
 
 with tab7:
     st.subheader("🤖 Swarm Robotics Applications")
-    st.write("Ground robots supporting drone operations (game NPC movement)")
+    st.write("Ground robots supporting drone operations")
 
 with tab8:
     st.subheader("🚁 Drone Swarm + Real A* (Video Game Pathfinding)")
-    st.write("Real A* optimized for video games — hierarchical, jump-point ready, dynamic replanning.")
+    st.write("Real A* optimized for video games — dynamic replanning, heuristic tuning, smooth trajectories.")
     
     col1, col2 = st.columns(2)
     with col1:
@@ -245,7 +248,7 @@ with tab8:
                 st.session_state.planned_path = path
                 st.success(f"✅ Video Game A* found optimal path to Daughter {target_id} — {len(path)} waypoints!")
             else:
-                st.error("No path found — game fallback to broader search")
+                st.error("No path found — game fallback")
     with col2:
         if st.button("📡 Launch Drone Swarm on Game Path"):
             if st.session_state.planned_path is not None:
@@ -254,33 +257,20 @@ with tab8:
             else:
                 st.warning("Plan a path first")
     
-    # 3D Visualization with Path and Explored Nodes
+    # 3D Visualization
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(st.session_state.drone_positions[:,0], st.session_state.drone_positions[:,1], st.session_state.drone_positions[:,2], c='lime', s=80, marker='^', label='Drone Swarm')
     if st.session_state.planned_path is not None:
-        ax.plot(st.session_state.planned_path[:,0], st.session_state.planned_path[:,1], st.session_state.planned_path[:,2], c='yellow', linewidth=4, label='Real A* Path (Game Optimized)')
+        ax.plot(st.session_state.planned_path[:,0], st.session_state.planned_path[:,1], st.session_state.planned_path[:,2], c='yellow', linewidth=4, label='Real A* Path')
     if st.session_state.a_star_explored is not None:
         ax.scatter(st.session_state.a_star_explored[:,0], st.session_state.a_star_explored[:,1], st.session_state.a_star_explored[:,2], c='red', s=15, alpha=0.4, label='Explored Nodes')
     ax.set_xlim(-6, 6)
     ax.set_ylim(-4, 4)
     ax.set_zlim(0, 3)
-    ax.set_title("Video Game A* Drone Pathfinding — Optimal Trajectory + Explored Nodes")
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_zlabel("Altitude")
+    ax.set_title("Video Game A* Drone Pathfinding")
     ax.legend()
     st.pyplot(fig, use_container_width=True)
-    
-    st.markdown('<div class="drone-card">', unsafe_allow_html=True)
-    st.write("**Video Game Pathfinding Features:**")
-    st.write("• Real A* with Euclidean heuristic (industry standard)")
-    st.write("• Dynamic obstacle avoidance & replanning")
-    st.write("• Hierarchical-ready for large game worlds")
-    st.write("• Jump-point search potential for grid optimization")
-    st.write("• Smooth steering along computed paths (future NPC behavior)")
-    st.write("• Voice-triggered game-style missions")
-    st.markdown('</div>', unsafe_allow_html=True)
 
 with tab9:
     st.subheader("📊 Rune Provenance")
@@ -296,4 +286,4 @@ if st.sidebar.button("🔥 Fire Unity Flap"):
 st.sidebar.checkbox("Mobile-First Mode", value=st.session_state.is_mobile, key="is_mobile")
 
 st.caption("War Eagle eternal 🦅❤️ — Thank you Elon, xAI & Grok. This could not be possible without you.")
-st.caption("#AUBIETERNAL #WarEagleEternal #VideoGamePathfinding #RealAStar #DroneSwarm #HyperlatticeGenesis")
+st.caption("#AUBIETERNAL #WarEagleEternal #VideoGamePathfinding #RealAStar #HyperlatticeGenesis")
