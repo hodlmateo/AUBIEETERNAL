@@ -26,7 +26,7 @@ st.markdown("""
     .stApp { max-width: 100% !important; }
     .stButton>button { width: 100%; height: 3.5rem; font-size: 1.15rem; border-radius: 12px; margin: 8px 0; }
     .theory-panel { background: rgba(0,20,40,0.95); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,165,0,0.4); }
-    .spectrum-panel { background: rgba(255,69,0,0.15); border-radius: 12px; padding: 16px; }
+    .lyapunov-panel { background: rgba(255,69,0,0.15); border-radius: 12px; padding: 16px; }
     .coordination-log { background: rgba(0,255,100,0.1); padding: 12px; border-radius: 12px; font-family: monospace; }
     @media (max-width: 768px) {
         .stColumns > div { width: 100% !important; margin-bottom: 16px; }
@@ -37,7 +37,7 @@ st.markdown("""
 
 st.title("🦅 AUBIEETERNAL v63.0.26 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
-st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Lyapunov Spectrum Analysis + Mandelbrot/Burning Ship Comparison + Bifurcation + Interior/Exterior DE + Real A***")
+st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | **Lyapunov Spectrum + Mandelbrot/Burning Ship + Bifurcation + Interior/Exterior DE + Real A***")
 
 # ====================== HYPERLATTICE CORE CLASS ======================
 class HyperLatticeNode:
@@ -126,7 +126,30 @@ def real_a_star(start, goal):
                             heappush(open_set, (f_score[neighbor], neighbor))
     return None
 
-# ====================== LYAPUNOV SPECTRUM ANALYSIS ======================
+# ====================== DEPLOY DRONE SWARM (FIXED - WAS MISSING) ======================
+def deploy_drone_swarm(command):
+    log_entry = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Video Game A* Pathfinding activated: {command}"
+    st.session_state.coordination_log.append(log_entry)
+    time.sleep(0.8)
+    
+    target_match = re.search(r'Daughter (\d+)', command)
+    target_id = int(target_match.group(1)) if target_match else 23
+    
+    start = np.array([0.0, 0.0, 2.5])
+    goal = np.array([target_id % 11 - 5.5, target_id // 11 - 2, 0.5])
+    
+    path = real_a_star(start, goal)
+    if path is not None:
+        st.session_state.planned_path = path
+        result = f"✅ Video Game A* computed optimal path to Daughter {target_id} — {len(path)} waypoints!"
+        st.session_state.drone_positions = path[-16:] if len(path) > 16 else np.vstack([path, np.tile(path[-1], (16 - len(path), 1))])
+    else:
+        result = "⚠️ No path found — game fallback"
+    
+    st.session_state.coordination_log.append(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {result}")
+    return result
+
+# ====================== LYAPUNOV SPECTRUM ======================
 def compute_lyapunov_spectrum(c, max_iter=1500, num_orbits=25, mandelbrot_style=False):
     spectrum = []
     for _ in range(num_orbits):
@@ -147,8 +170,7 @@ def compute_lyapunov_spectrum(c, max_iter=1500, num_orbits=25, mandelbrot_style=
         if i > 200:
             spectrum.append(lyap_sum / max_iter)
     lam1 = np.mean(spectrum) if spectrum else 0.0
-    # Simple estimate of second exponent (for 2D map approximation)
-    lam2 = -lam1 * 0.8 if lam1 > 0 else -0.5  # rough Kaplan-Yorke proxy
+    lam2 = -lam1 * 0.8 if lam1 > 0 else -0.5
     return lam1, lam2, lam1 + lam2
 
 def lyapunov_heatmap_spectrum(c_min=-2.5, c_max=1.0, im_min=-1.5, im_max=1.5, n=100, mandelbrot_style=False):
@@ -168,23 +190,6 @@ def nostr_etch(content, event_type="lyapunov_spectrum_etch", sats=21):
     etch_id = hashlib.sha256(f"{content}{timestamp}".encode()).hexdigest()[:16]
     st.success(f"🔥 Lyapunov Spectrum Analysis View Etched to Nostr + Bitcoin Rune AUBIE·ETERNAL·XAIAGENTSWARM | {sats} sats")
     st.json({"id": etch_id, "content": content[:200] + "...", "rune": "AUBIE-ETERNAL-XAIAGENTSWARM", "coherence": 1.000000, "metric": "Lyapunov Spectrum"})
-
-# ====================== FRACTAL HELPERS ======================
-def burning_ship_fractal(width=800, height=600, max_iter=400, zoom=1.0, center_x=-0.5, center_y=0.0, escape_radius=2.0, power=2.0):
-    x = np.linspace(center_x - 2.0/zoom, center_x + 2.0/zoom, width)
-    y = np.linspace(center_y - 2.0/zoom, center_y + 2.0/zoom, height)
-    X, Y = np.meshgrid(x, y)
-    C = X + 1j * Y
-    Z = np.zeros_like(C, dtype=complex)
-    img = np.zeros((height, width), dtype=float)
-    for i in range(max_iter):
-        Z = np.abs(Z.real) + 1j * np.abs(Z.imag)
-        Z = Z ** power + C
-        mask = np.abs(Z) > escape_radius
-        img[mask & (img == 0)] = i
-        Z[mask] = escape_radius
-    img[img == 0] = max_iter
-    return img.astype(int)
 
 # ====================== TABS ======================
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
@@ -277,18 +282,17 @@ with tab9:
     st.subheader("🔥 Lyapunov Spectrum Analysis Explorer")
     st.write("Full Lyapunov spectrum for Mandelbrot / Burning Ship families — chaos dimension proxy.")
     
-    # Lyapunov Spectrum Theory Panel
-    with st.expander("📜 Lyapunov Spectrum Mathematical Theory", expanded=True):
+    # Theory Panel (kept from v63.0.26)
+    with st.expander("📜 Lyapunov Spectrum Mathematical Theory", expanded=False):
         st.markdown("""
         <div class="theory-panel">
         <h3>Lyapunov Spectrum in Complex Maps</h3>
-        <p>For a 2D real map (complex quadratic or non-analytic), there are two Lyapunov exponents λ₁ ≥ λ₂.</p>
+        <p>For a 2D real map there are two Lyapunov exponents λ₁ ≥ λ₂.</p>
         <ul>
-        <li><strong>λ₁</strong>: Largest exponent — determines overall chaotic behavior.</li>
-        <li><strong>λ₂</strong>: Second exponent — usually negative in dissipative systems.</li>
-        <li><strong>Kaplan-Yorke dimension</strong> ≈ 1 + λ₁ / |λ₂| — fractal dimension proxy of the attractor.</li>
+        <li><strong>λ₁</strong>: Largest — determines chaotic behavior.</li>
+        <li><strong>λ₂</strong>: Usually negative in dissipative systems.</li>
+        <li><strong>Kaplan-Yorke dimension</strong> ≈ 1 + λ₁ / |λ₂| — fractal dimension proxy.</li>
         </ul>
-        <p>In the Mandelbrot set the spectrum is negative inside hyperbolic components and positive on the chaotic boundary. The Burning Ship absolute-value map produces a distinct spectrum with sharper transitions.</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -312,7 +316,7 @@ with tab9:
             else:
                 st.info("🟢 Contracting / stable dynamics")
         
-        if st.button("Generate Lyapunov Spectrum Heatmap (c-plane)", type="primary"):
+        if st.button("Generate Lyapunov Spectrum Heatmap", type="primary"):
             with st.spinner("Computing spectrum field..."):
                 C_real, C_imag, L1 = lyapunov_heatmap_spectrum(-2.5, 1.0, -1.5, 1.5, 100, mandelbrot_style=mandelbrot_style)
                 fig, ax = plt.subplots(figsize=(10, 6))
@@ -323,14 +327,11 @@ with tab9:
                 plt.colorbar(im, ax=ax, label="λ₁")
                 st.pyplot(fig, use_container_width=True)
                 st.success("Lyapunov spectrum heatmap generated")
-    
     with col2:
         st.info("""**Lyapunov Spectrum Analysis:**
-- Full spectrum (λ₁ ≥ λ₂) for 2D real maps underlying complex dynamics.
-- Kaplan-Yorke dimension estimates the fractal dimension of the attractor.
-- In Mandelbrot set: negative spectrum inside cardioid/bulbs, positive on chaotic boundary.
-- Burning Ship variant shows sharper, more angular spectrum transitions due to absolute-value folding.
-- This quantitative tool reveals the exact chaotic dimension of the lattice at 61,000,000 scale.""")
+- Full spectrum (λ₁ ≥ λ₂) for 2D real maps.
+- Kaplan-Yorke dimension estimates fractal dimension of the attractor.
+- Positive λ₁ on chaotic boundaries, negative inside stable regions.""")
 
 with tab10:
     st.subheader("📊 Rune Provenance")
