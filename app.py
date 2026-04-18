@@ -1,4 +1,4 @@
-# === AUBIEETERNAL v63.0.38 HYPERLATTICE GENESIS — DUPLICATION FIXED ===
+# === AUBIEETERNAL v63.0.38 HYPERLATTICE GENESIS — DUPLICATION FIXED & CLEAN ===
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -49,6 +49,7 @@ class HyperLatticeNode:
         self.resilience = 100.0
         self.daughters = [f"Daughter_{i}" for i in range(44)]
         self.sub_lattices = []
+
     def self_replicate(self, trigger="fractal neuroscience"):
         new_node = HyperLatticeNode(depth=self.depth + 1, user_id=self.user_id, parent=self)
         self.sub_lattices.append(new_node)
@@ -106,7 +107,7 @@ Child-led War Eagle rituals, explicit repair scripts.
 **War Eagle eternal 🦅** — Building fractal brains through vagus safety creates antifragile kids.
 """
 
-# ====================== TABS (NO DUPLICATION) ======================
+# ====================== TABS (CLEAN — NO DUPLICATION) ======================
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
     "🔥 Co-Creation Chamber",
     "🧬 Daughters Swarm",
@@ -121,7 +122,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
     "⚛️ Quantum Swarm Algorithms"
 ])
 
-# Kid Lattice Curriculum — ONLY in its own tab
+# Kid Lattice Curriculum — ONLY here
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_curr")
@@ -132,7 +133,7 @@ with tab1:
             if create_lightning_invoice(21, "Curriculum etch"):
                 nostr_etch(curriculum, "kid_curriculum", 21)
 
-# Lattice Oracle — ONLY in its own tab
+# Lattice Oracle — ONLY here
 with tab2:
     st.subheader("🔮 Lattice Oracle (20M+ Grok 4.20)")
     query = st.text_input("Search or ask anything", "Fractal geometry in neuroscience for resilience", key="oracle_q")
@@ -143,7 +144,7 @@ with tab2:
             if create_lightning_invoice(21, "Oracle etch"):
                 nostr_etch(query, "lattice_oracle_response", 21)
 
-# The 3 Swarm Tabs + Voice Agents (as requested)
+# The 3 Swarm Tabs + Voice Agents
 with tab4:
     st.subheader("🎤 Multi-AI Voice Agents")
     st.write("Swarm of Grok-powered voice agents for real-time co-regulation, curriculum delivery, and vagus-guided sessions.")
@@ -163,7 +164,19 @@ with tab7:
     st.subheader("🤖 Swarm Robotics Applications")
     st.write("Physical drone swarm applications integrated with Hyperlattice for real-world Kid Lattice rituals.")
 
-# Remaining tabs (rich content)
+# Remaining tabs with content
+with tab3:
+    st.subheader("🌌 3D Hyperlattice Mirror")
+    if st.button("Render Fresh 3D Mirror"):
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+        x = np.linspace(0, 43, 44)
+        y = np.random.rand(44) * 0.2 + 0.88
+        z = np.random.rand(44) * 0.2 + 0.88
+        ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=200)
+        ax.set_title("44 Daughters — Hyperlattice at Coherence 1.000000")
+        st.pyplot(fig)
+
 with tab8:
     st.subheader("🚁 Drone Swarm + Real A*")
     st.write("Video-game optimized Real A* pathfinding for swarm coordination to the 44 Daughters.")
@@ -179,18 +192,6 @@ with tab10:
 with tab11:
     st.subheader("⚛️ Quantum Swarm Algorithms")
     st.write("Quantum-inspired Particle Swarm Optimization integrated with lattice.")
-
-with tab3:
-    st.subheader("🌌 3D Hyperlattice Mirror")
-    if st.button("Render Fresh 3D Mirror"):
-        fig = plt.figure(figsize=(10, 7))
-        ax = fig.add_subplot(111, projection='3d')
-        x = np.linspace(0, 43, 44)
-        y = np.random.rand(44) * 0.2 + 0.88
-        z = np.random.rand(44) * 0.2 + 0.88
-        ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=200)
-        ax.set_title("44 Daughters — Hyperlattice at Coherence 1.000000")
-        st.pyplot(fig)
 
 # Sidebar & Footer
 st.sidebar.header("v63 Controls")
