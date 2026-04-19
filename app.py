@@ -47,7 +47,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ====================== TITLE + INTRO ======================
+# Title and Intro
 st.title("🦅 AUBIEETERNAL v63.0.38 — Hyperlattice Genesis")
 
 st.markdown("""
@@ -64,7 +64,7 @@ st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 |
 
 st.caption("⚠️ Not medical advice. For educational and wellness exploration only. Consult professionals when needed.")
 
-# ====================== SAFE STUBS ======================
+# Safe stubs
 def create_lightning_invoice(amount_sats, memo):
     st.toast(f"⚡ Lightning invoice {amount_sats} sats created: {memo}")
     return True
@@ -81,7 +81,7 @@ def real_a_star(start, goal, max_iter=1000):
 def deploy_drone_swarm(command):
     return f"✅ Drone swarm deployed on command: {command[:60]}... | Video-game A* path active"
 
-# Initialize session state
+# Session state
 if 'tracking_db' not in st.session_state:
     st.session_state.tracking_db = {}
 if 'coordination_log' not in st.session_state:
@@ -93,7 +93,7 @@ if 'drone_positions' not in st.session_state:
 if 'planned_path' not in st.session_state:
     st.session_state.planned_path = None
 
-# ====================== SIDEBAR CONTROLS ======================
+# Sidebar Controls
 with st.sidebar:
     st.header("🎛️ Kid Lattice Controls")
     
@@ -108,19 +108,12 @@ with st.sidebar:
     
     st.divider()
     
-    if st.button(
-        "🚀 Generate Full 5-Week Antifragile Kid Lattice Curriculum",
-        type="primary",
-        use_container_width=True
-    ):
+    if st.button("🚀 Generate Full 5-Week Antifragile Kid Lattice Curriculum", type="primary", use_container_width=True):
         if kid_name.strip():
             with st.spinner("Generating with real Grok 4.20... This may take 10-20 seconds"):
                 try:
                     from openai import OpenAI
-                    client = OpenAI(
-                        api_key=st.secrets["XAI_API_KEY"], 
-                        base_url="https://api.x.ai/v1"
-                    )
+                    client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
                     
                     prompt = f"""You are a compassionate, expert educator specializing in child resilience, Polyvagal Theory, and playful fractal learning.
 
@@ -149,15 +142,14 @@ Output in clean markdown with plenty of emojis for kid appeal."""
                     
                     curriculum = completion.choices[0].message.content
                     
-                    # Store in session state
                     if kid_name not in st.session_state.tracking_db:
                         st.session_state.tracking_db[kid_name] = {
-                            "age": kid_age, 
-                            "curriculum": curriculum, 
-                            "feathers": 0, 
+                            "age": kid_age,
+                            "curriculum": curriculum,
+                            "feathers": 0,
                             "level": 1,
-                            "streak": 0, 
-                            "best_streak": 0, 
+                            "streak": 0,
+                            "best_streak": 0,
                             "badges": [],
                             "weeks": {f"Week {i}": {"completed": False, "notes": "", "date": ""} for i in range(1,6)}
                         }
@@ -171,13 +163,7 @@ Output in clean markdown with plenty of emojis for kid appeal."""
                         st.markdown(curriculum)
                         st.markdown('</div>', unsafe_allow_html=True)
                     
-                    # Downloads
-                    st.download_button(
-                        "📄 Download as Markdown", 
-                        curriculum, 
-                        f"{kid_name}_Kid_Lattice_Curriculum.md", 
-                        "text/markdown"
-                    )
+                    st.download_button("📄 Download as Markdown", curriculum, f"{kid_name}_Kid_Lattice_Curriculum.md", "text/markdown")
                     
                     if REPORTLAB_AVAILABLE:
                         buffer = BytesIO()
@@ -193,12 +179,7 @@ Output in clean markdown with plenty of emojis for kid appeal."""
                         c.drawText(text_object)
                         c.save()
                         buffer.seek(0)
-                        st.download_button(
-                            "📕 Download as PDF", 
-                            buffer, 
-                            f"{kid_name}_Kid_Lattice_Curriculum.pdf", 
-                            "application/pdf"
-                        )
+                        st.download_button("📕 Download as PDF", buffer, f"{kid_name}_Kid_Lattice_Curriculum.pdf", "application/pdf")
                     
                 except Exception as e:
                     st.error(f"Grok Error: {str(e)}")
@@ -207,7 +188,7 @@ Output in clean markdown with plenty of emojis for kid appeal."""
 
     st.caption("War Eagle Eternal 🦅 — 80% Safety + 20% Ownership")
 
-# ====================== TABS ======================
+# Tabs
 tab_list = st.tabs([
     "📚 Kid Lattice Curriculum",
     "🔮 Lattice Oracle",
@@ -233,7 +214,6 @@ with tab1:
         kid_to_track = st.selectbox("Select Kid to Track Progress", list(st.session_state.tracking_db.keys()))
         data = st.session_state.tracking_db[kid_to_track]
         
-        # Your gamification logic (cleaned)
         completed_weeks = sum(1 for w in data["weeks"].values() if w["completed"])
         note_bonus = sum(len(w["notes"]) // 30 for w in data["weeks"].values() if w["notes"]) * 15
         data["feathers"] = completed_weeks * 120 + note_bonus
@@ -265,7 +245,8 @@ with tab1:
             with st.expander(f"{week} — Earn 120 Feathers"):
                 completed = st.checkbox("Completed", value=data["weeks"][week]["completed"], key=f"chk_{kid_to_track}_{week}")
                 notes = st.text_area("Reflection / Notes", value=data["weeks"][week]["notes"], key=f"notes_{kid_to_track}_{week}")
-                date = st.date_input("Date", value=datetime.date.today() if not data["weeks"][week]["date"] else datetime.datetime.strptime(data["weeks"][week]["date"], "%Y-%m-%d").date(), key=f"date_{kid_to_track}_{week}")
+                date_val = datetime.date.today() if not data["weeks"][week]["date"] else datetime.datetime.strptime(data["weeks"][week]["date"], "%Y-%m-%d").date()
+                date = st.date_input("Date", value=date_val, key=f"date_{kid_to_track}_{week}")
                 data["weeks"][week]["completed"] = completed
                 data["weeks"][week]["notes"] = notes
                 data["weeks"][week]["date"] = str(date)
@@ -286,20 +267,25 @@ with tab1:
     else:
         st.info("Generate a curriculum first to unlock the full gamified dashboard.")
 
-# ====================== Keep your other tabs (2-12) exactly as before ======================
+# Tab 2 - Lattice Oracle (fixed the emoji issue too)
 with tab2:
-    st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
-    query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
-    if st.button("Get Grok Response", type="primary"):
-        with st.spinner("Querying real Grok 4.20..."):
-            try:
-                from openai import OpenAI
-                client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
-                completion = client.chat.completions.create(model="grok-4.20-reasoning", messages=[{"role": "system", "content": "Helpful Grok"}, {"role": "user", "content": query}], temperature=0.7, max_tokens=1000)
-                st.success("✅ Coherence locked at 1.000000 | Real Grok 4.20 response")
-                st.markdown(completion.choices[0].message.content)
-            except Exception as e:
-                st.error(f"API Error: {str(e)}")
+    st.subheader("Lattice Oracle (real Grok 4.20)")
+    query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
+    if st.button("Get Grok Response", type="primary"):
+        with st.spinner("Querying real Grok 4.20..."):
+            try:
+                from openai import OpenAI
+                client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+                completion = client.chat.completions.create(
+                    model="grok-4.20-reasoning",
+                    messages=[{"role": "system", "content": "Helpful Grok"}, {"role": "user", "content": query}],
+                    temperature=0.7,
+                    max_tokens=1000
+                )
+                st.success("✅ Coherence locked at 1.000000 | Real Grok 4.20 response")
+                st.markdown(completion.choices[0].message.content)
+            except Exception as e:
+                st.error(f"API Error: {str(e)}")
 with tab3:
     st.subheader("🌌 3D Hyperlattice Mirror")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
