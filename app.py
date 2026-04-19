@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 # Defensive imports
 try:
@@ -8,6 +9,14 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+
+try:
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.utils import simpleSplit
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
 
 st.set_page_config(
     page_title="AUBIEETERNAL v63.0.38 — Hyperlattice Genesis",
@@ -55,13 +64,13 @@ tab_list = st.tabs([
 ])
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = tab_list
 
-# ====================== TAB 1: KID LATTICE ======================
+# ====================== TAB 1: KID LATTICE (PDF + Markdown) ======================
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
     kid_age = st.number_input("Approximate Age", 4, 18, 8, key="kid_age")
     special_notes = st.text_area("Special notes", "Foster care setting, building resilience after transitions", key="notes")
-    
+   
     if st.button("Generate Full 5-Week Antifragile Kid Lattice Curriculum + Grok Co-Tutor", type="primary"):
         if kid_name.strip():
             with st.spinner("Generating with real Grok 4.20..."):
@@ -77,15 +86,53 @@ with tab1:
                         temperature=0.7, max_tokens=1600
                     )
                     curriculum = completion.choices[0].message.content
+                    
                     st.success(f"✅ Curriculum generated for {kid_name}! | Coherence 1.000000")
                     st.markdown(curriculum)
-                    st.download_button("📄 Download Markdown", curriculum, f"{kid_name}_Curriculum.md", "text/markdown")
+                    
+                    # Markdown download
+                    st.download_button(
+                        "📄 Download as Markdown",
+                        curriculum,
+                        f"{kid_name}_Curriculum.md",
+                        "text/markdown"
+                    )
+                    
+                    # PDF download
+                    if REPORTLAB_AVAILABLE:
+                        buffer = BytesIO()
+                        c = canvas.Canvas(buffer, pagesize=letter)
+                        width, height = letter
+                        text_object = c.beginText(40, height - 40)
+                        text_object.setFont("Helvetica", 11)
+                        
+                        for line in curriculum.split('\n'):
+                            wrapped_lines = simpleSplit(line, "Helvetica", 11, width - 80)
+                            for wrapped_line in wrapped_lines:
+                                text_object.textLine(wrapped_line)
+                            text_object.textLine("")
+                        
+                        c.drawText(text_object)
+                        c.save()
+                        buffer.seek(0)
+                        
+                        st.download_button(
+                            "📕 Download as PDF",
+                            buffer,
+                            f"{kid_name}_Curriculum.pdf",
+                            "application/pdf"
+                        )
+                    else:
+                        st.info("📌 Install reportlab (`pip install reportlab`) for PDF download support")
+                    
                 except Exception as e:
                     st.error(f"Grok Error: {str(e)}")
         else:
             st.warning("Please enter the kid's name.")
 
-# ====================== TAB 2: LATTICE ORACLE ======================
+# ====================== REMAINING TABS (unchanged) ======================
+# [All other tabs remain exactly as in your last version – tab2 through tab8]
+
 with tab2:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
     query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
@@ -104,7 +151,7 @@ with tab2:
             except Exception as e:
                 st.error(f"API Error: {str(e)}")
 
-# ====================== TAB 3: 3D MIRROR ======================
+# ... (tab3 to tab8 unchanged from your previous code)# ====================== TAB 3: 3D MIRROR ======================
 with tab3:
     st.subheader("🌌 3D Hyperlattice Mirror")
     if st.button("Render 3D Swarm Mirror (44 Daughters)"):
