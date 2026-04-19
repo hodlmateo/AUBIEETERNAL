@@ -1,4 +1,4 @@
-Pythonimport streamlit as st
+import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -83,7 +83,7 @@ tab_list = st.tabs([
 
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# TAB 1 – Kid Lattice (unchanged, fully working)
+# TAB 1: Kid Lattice Curriculum + Gamification (full working block)
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
@@ -131,13 +131,10 @@ with tab1:
         else:
             st.warning("Please enter the kid's name.")
 
-    # Gamification section (unchanged)
     st.subheader("🦅 Gamified War Eagle Eternal Progress")
     if st.session_state.tracking_db:
         kid_to_track = st.selectbox("Select Kid", list(st.session_state.tracking_db.keys()))
         data = st.session_state.tracking_db[kid_to_track]
-        # ... (your full gamification code remains exactly as before)
-        # [I kept the entire gamification block unchanged to avoid any drift]
         completed_weeks = sum(1 for w in data["weeks"].values() if w["completed"])
         note_bonus = sum(len(w["notes"]) // 30 for w in data["weeks"].values() if w["notes"]) * 15
         data["feathers"] = completed_weeks * 120 + note_bonus
@@ -181,8 +178,8 @@ with tab1:
                 st.success("Etched on-chain forever!")
                 st.balloons()
     else:
-        st.info("Generate a curriculum first to unlock the full gamified dashboard."
-                
+        st.info("Generate a curriculum first to unlock the full gamified dashboard.")
+        
 # ====================== ORIGINAL TABS 2-8 (unchanged) ======================
 with tab2:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
@@ -318,7 +315,7 @@ with tab8:
         st.balloons()
         st.info("Transaction simulated — in production this would create a real Runes inscription.")
 
-# ====================== NEW TABS 9–12 (fixed & safe) ======================
+# ====================== NEW TABS 9-12 ======================
 with tab9:
     st.subheader("🎤 Multi-AI Voice Agents")
     st.write("Speak naturally — video game A* pathfinding active.")
@@ -329,7 +326,7 @@ with tab9:
             with st.spinner("Computing real A* path..."):
                 result = deploy_drone_swarm(transcribed)
                 st.success(result)
-                st.session_state.coordination_log.append(f"Voice command executed: {transcribed}")
+                st.session_state.coordination_log.append(f"Voice command: {transcribed}")
 
 with tab10:
     st.subheader("🛠️ Swarm Coordination Dashboard")
