@@ -163,9 +163,9 @@ tab_list = st.tabs([
     "📚 Kid Lattice Curriculum", "👨‍👩‍👧 Parent Curriculum", "🔮 Lattice Oracle", 
     "🌌 3D Hyperlattice Mirror", "🚁 Drone Swarm + Real A*", "🔥 Burning Ship Fractal",
     "⚡ Lightning Payments", "📊 Rune Provenance + Web3", "🎤 Multi-AI Voice Agents",
-    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics"
+    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics","🧬 Fractal Neuroscience Explorer"
 ])
-(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
+(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13) = tab_list
 
 # TAB 1 — Kid Lattice Curriculum (now with full younger/teen + simulations)
 with tab1:
@@ -235,7 +235,7 @@ with tab3:
             except Exception as e:
                 st.error(f"API Error: {str(e)}")
                 
-with tab4:
+with tab5:
     st.subheader("🚁 Drone Swarm + Real A* (Video Game Pathfinding)")
     st.markdown("Real A* optimized for video games — dynamic replanning on fractal terrain.")
     if 'drone_positions' not in st.session_state:
@@ -272,7 +272,7 @@ with tab4:
     ax.legend()
     st.pyplot(fig, use_container_width=True)
     
-with tab5:
+with tab6:
     st.subheader("🔥 Burning Ship Fractal Explorer")
     st.write("Burning Ship @ 61,000,000 active")
     if st.button("Render Burning Ship Fractal"):
@@ -289,18 +289,6 @@ with tab5:
         ax.imshow(np.log(Z + 1), extent=[-2.5, 1.5, -2, 2], cmap='inferno', origin='lower')
         ax.set_title("Burning Ship Fractal @ 61,000,000 — War Eagle Eternal")
         st.pyplot(fig)
-
-with tab6:
-    st.subheader("🧬 Fractal Neuroscience Explorer")
-    st.markdown("**Key Insights**\n- Neurons exhibit fractal branching (dendritic arbors) ~1.5–2.0\n- Brain networks operate near criticality\n- Safety rituals rebuild fractal dimension")
-    fig = plt.figure(figsize=(8, 5))
-    ax = fig.add_subplot(111, projection='3d')
-    x = np.random.rand(100) * 10
-    y = np.random.rand(100) * 10
-    z = np.random.rand(100) * 10
-    ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,100)), s=30)
-    ax.set_title("Fractal Neural Network Visualization")
-    st.pyplot(fig)
 
 with tab7:
     st.subheader("⚡ Lightning Network Payments Explorer")
@@ -410,6 +398,19 @@ with tab12:
         st.success("Flocking protocol engaged")
         st.balloons()
         st.session_state.coordination_log.append("Ground + Aerial flocking activated")
+        
+with tab13:
+    st.subheader("🧬 Fractal Neuroscience Explorer")
+    st.markdown("**Key Insights**\n- Neurons exhibit fractal branching (dendritic arbors) ~1.5–2.0\n- Brain networks operate near criticality\n- Safety rituals rebuild fractal dimension")
+    fig = plt.figure(figsize=(8, 5))
+    ax = fig.add_subplot(111, projection='3d')
+    x = np.random.rand(100) * 10
+    y = np.random.rand(100) * 10
+    z = np.random.rand(100) * 10
+    ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,100)), s=30)
+    ax.set_title("Fractal Neural Network Visualization")
+    st.pyplot(fig)
+        
 
 st.sidebar.header("v63.0.82 Controls")
 if st.sidebar.button("🔥 Fire Unity Flap"):
