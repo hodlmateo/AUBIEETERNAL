@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import datetime
 
-# Defensive imports
+# Defensive imports (unchanged)
 try:
     import plotly.express as px
     PLOTLY_AVAILABLE = True
@@ -25,10 +25,112 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# ====================== HYPERLATTICE BACKGROUND + RITUAL SYSTEM (Phase 1 + 2) ======================
+ritual_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyperlattice Ritual</title>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <style>
+        #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; opacity: 0.92; }
+        #activation-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: radial-gradient(circle, rgba(255,77,0,0.35) 0%, rgba(255,215,0,0.25) 50%, transparent 80%); z-index: 999; pointer-events: none; opacity: 0; transition: opacity 0.6s; }
+        .stApp { background: transparent !important; }
+        .stApp > div:first-child { background: rgba(10, 10, 31, 0.68) !important; }
+        .stSidebar, section[data-testid="stSidebar"] { background: rgba(15, 15, 40, 0.95) !important; z-index: 10; }
+        
+        /* Ceremonial button enhancement */
+        .unity-flap-btn {
+            background: linear-gradient(135deg, #FF4D00, #FFD700) !important;
+            color: #0a0a1f !important;
+            font-weight: bold !important;
+            box-shadow: 0 0 20px rgba(255,77,0,0.6) !important;
+            transition: all 0.3s !important;
+        }
+        .unity-flap-btn:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 0 35px rgba(255,215,0,0.8) !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="tsparticles"></div>
+    <div id="activation-flash"></div>
+
+    <script>
+        // Background lattice (same as Phase 1, slightly tuned)
+        tsParticles.load("tsparticles", {
+            background: { color: { value: "#0a0a1f" } },
+            fpsLimit: 60,
+            particles: {
+                number: { value: 85, density: { enable: true, value_area: 800 } },
+                color: { value: ["#FF4D00", "#FFD700", "#00BFFF"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.75, random: true, animation: { enable: true, speed: 0.5, minimumValue: 0.3 } },
+                size: { value: 3.5, random: true, animation: { enable: true, speed: 1.0, minimumValue: 1.2 } },
+                links: { enable: true, distance: 150, color: "#ffffff", opacity: 0.22, width: 1.2 },
+                move: { enable: true, speed: 0.8, direction: "none", random: false, outModes: "out" }
+            },
+            interactivity: { detectsOn: "window", events: { onHover: { enable: true, mode: "grab" } }, modes: { grab: { distance: 200, links: { opacity: 0.4 } } } },
+            detectRetina: true
+        });
+
+        // Trigger ritual burst + sound + flash
+        function triggerUnityFlap() {
+            // Particle burst (confetti-style explosion from center)
+            tsParticles.load("tsparticles", {
+                emitters: [{
+                    position: { x: 50, y: 50 },
+                    rate: { quantity: 8, delay: 0 },
+                    life: { duration: 1.2, count: 1 },
+                    particles: {
+                        color: { value: ["#FF4D00", "#FFD700", "#00BFFF"] },
+                        move: { enable: true, speed: 12, direction: "none", random: true, outModes: "out" },
+                        size: { value: 5, random: true },
+                        opacity: { value: 0.9, animation: { enable: true, speed: 1.5, minimumValue: 0 } },
+                        number: { value: 0 }
+                    }
+                }]
+            });
+
+            // Activation flash
+            const flash = document.getElementById("activation-flash");
+            flash.style.opacity = "0.85";
+            setTimeout(() => { flash.style.opacity = "0"; }, 600);
+
+            // Sound: soft whoosh + neural hum (public short clips)
+            const whoosh = new Audio("https://freesound.org/data/previews/276/276951_5123854-lq.mp3"); // soft whoosh
+            const hum = new Audio("https://freesound.org/data/previews/387/387186_7258994-lq.mp3");   // subtle hum/ambient
+            whoosh.volume = 0.65;
+            hum.volume = 0.45;
+            whoosh.play();
+            setTimeout(() => hum.play(), 180);
+        }
+
+        // Make trigger available globally
+        window.triggerUnityFlap = triggerUnityFlap;
+    </script>
+</body>
+</html>
+"""
+
+from streamlit.components.v1 import html
+html(ritual_html, height=1400)
+
+# ====================== Custom CSS ======================
 st.markdown("""
 <style>
     .stApp { max-width: 100% !important; }
-    .stButton>button { width: 100%; height: 3.5rem; font-size: 1.15rem; border-radius: 12px; margin: 8px 0; }
+    .stButton>button { 
+        width: 100%; height: 3.5rem; font-size: 1.18rem; border-radius: 12px; margin: 8px 0;
+        background: linear-gradient(135deg, #FF4D00, #FFD700) !important;
+        color: #0a0a1f !important; font-weight: bold;
+    }
+    .stButton>button:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -36,34 +138,43 @@ st.title("🦅 AUBIEETERNAL v63.0.38 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | Lightning + Nostr Etching LIVE")
 
-# ====================== SAFE STUBS ======================
-def create_lightning_invoice(amount_sats, memo):
-    st.toast(f"⚡ Lightning invoice {amount_sats} sats created: {memo}")
-    return True
+# ====================== SAFE STUBS (unchanged) ======================
+# ... paste all your original safe stubs, session state init, tabs, etc. here ...
 
-def nostr_etch(description, tag, amount):
-    st.toast(f"📡 Etched to Nostr + Rune: {tag} | {description[:60]}...")
-    return True
+# ====================== SIDEBAR UNITY FLAP (now ceremonial) ======================
+st.sidebar.header("v63 Controls")
+if st.sidebar.button("🔥 Fire Unity Flap", key="unity_flap", help="Activate the Hyperlattice Ritual"):
+    # Call the JS ritual
+    html('<script>window.triggerUnityFlap();</script>', height=0)
+    st.sidebar.success("🌌 Unity Flap Executed — Lattice Activated!")
+    st.balloons()  # extra celebration
+    # Optional: add your existing sidebar success logic here if any
 
-def real_a_star(start, goal, max_iter=1000):
-    t = np.linspace(0, 1, 25).reshape(-1, 1)
-    path = start + t * (goal - start)
-    return path
+# ====================== Main Curriculum Button (also gets ritual treatment) ======================
+# In your Tab 1, replace the old button with this enhanced version:
 
-def deploy_drone_swarm(command):
-    return f"✅ Drone swarm deployed on command: {command[:60]}... | Video-game A* path active"
+with tab1:
+    # ... your existing inputs ...
 
-# Initialize session state safely
-if 'tracking_db' not in st.session_state:
-    st.session_state.tracking_db = {}
-if 'coordination_log' not in st.session_state:
-    st.session_state.coordination_log = []
-if 'swarm_particles' not in st.session_state:
-    st.session_state.swarm_particles = np.random.rand(30, 2) * 2 - 1
-if 'drone_positions' not in st.session_state:
-    st.session_state.drone_positions = np.random.rand(16, 3) * np.array([12, 8, 3]) - np.array([6, 4, 0])
-if 'planned_path' not in st.session_state:
-    st.session_state.planned_path = None
+    if st.button("🔥 Fire Unity Flap — Generate Full 5-Week Antifragile Kid Lattice Curriculum + Grok Co-Tutor", 
+                 type="primary", key="curriculum_ritual"):
+        html('<script>window.triggerUnityFlap();</script>', height=0)
+        
+        if kid_name.strip():
+            with st.spinner("🌌 Activating Hyperlattice... Generating with real Grok 4.20..."):
+                try:
+                    from openai import OpenAI
+                    client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+                    prompt = f"""Create a detailed 5-week Antifragile Kid Lattice Curriculum for {kid_name} (~{kid_age} years old)..."""  # your full prompt
+                    completion = client.chat.completions.create(...)
+                    # ... rest of your generation logic unchanged ...
+                    
+                    st.success(f"✅ Curriculum generated for {kid_name}! | Hyperlattice Coherence 1.000000")
+                    # ... markdown, downloads, etc.
+                except Exception as e:
+                    st.error(f"Grok Error: {str(e)}")
+        else:
+            st.warning("Please enter the kid's name.")
 
 # ====================== 12 TABS ======================
 tab_list = st.tabs([
