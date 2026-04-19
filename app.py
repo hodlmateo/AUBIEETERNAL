@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 import datetime
-import json
 
 # Defensive imports
 try:
@@ -18,6 +17,9 @@ try:
     REPORTLAB_AVAILABLE = True
 except ImportError:
     REPORTLAB_AVAILABLE = False
+
+# IMPORTANT: Import html component HERE (before using it)
+from streamlit.components.v1 import html
 
 st.set_page_config(
     page_title="AUBIEETERNAL v63.0.38 — Hyperlattice Genesis",
@@ -90,14 +92,28 @@ ritual_html = """
 </body>
 </html>
 """
+
+# Render the background + ritual system
 html(ritual_html, height=1400)
 
+# Custom styling
 st.markdown("""
 <style>
     .stApp { max-width: 100% !important; }
-    .stButton>button { width: 100%; height: 3.5rem; font-size: 1.18rem; border-radius: 12px; margin: 8px 0;
-        background: linear-gradient(135deg, #FF4D00, #FFD700) !important; color: #0a0a1f !important; font-weight: bold; }
-    .stButton>button:hover { transform: scale(1.03); box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); }
+    .stButton>button { 
+        width: 100%; 
+        height: 3.5rem; 
+        font-size: 1.18rem; 
+        border-radius: 12px; 
+        margin: 8px 0;
+        background: linear-gradient(135deg, #FF4D00, #FFD700) !important; 
+        color: #0a0a1f !important; 
+        font-weight: bold; 
+    }
+    .stButton>button:hover { 
+        transform: scale(1.03); 
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); 
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -114,14 +130,7 @@ def nostr_etch(description, tag, amount):
     st.toast(f"📡 Etched: {tag}")
     return True
 
-def real_a_star(start, goal):
-    t = np.linspace(0, 1, 25).reshape(-1, 1)
-    return start + t * (goal - start)
-
-def deploy_drone_swarm(command):
-    return f"✅ Drone swarm: {command[:60]}..."
-
-# ====================== SESSION STATE INITIALIZATION (Critical Fix) ======================
+# ====================== SESSION STATE ======================
 if 'tracking_db' not in st.session_state:
     st.session_state.tracking_db = {}
 if 'last_curriculum' not in st.session_state:
@@ -154,7 +163,7 @@ tab_list = st.tabs([
 ])
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# ====================== TAB 1: Curriculum + PDF Fix ======================
+# ====================== TAB 1: Curriculum (with PDF) ======================
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
@@ -182,10 +191,9 @@ with tab1:
                     st.success(f"✅ Curriculum generated for {kid_name}!")
                     st.markdown(curriculum)
 
-                    # Markdown
                     st.download_button("📄 Download as Markdown", curriculum, f"{kid_name}_Curriculum.md", "text/markdown")
 
-                    # PDF
+                    # PDF Download
                     if REPORTLAB_AVAILABLE:
                         buffer = BytesIO()
                         c = canvas.Canvas(buffer, pagesize=letter)
