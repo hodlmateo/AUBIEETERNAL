@@ -22,13 +22,13 @@ except ImportError:
     PLOTLY_AVAILABLE = False
 
 st.set_page_config(
-    page_title="AUBIEETERNAL v63.0.82 — Hyperlattice Genesis",
+    page_title="AUBIEETERNAL v63.0.83 — Hyperlattice Genesis",
     page_icon="🦅",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ====================== RITUAL BACKGROUND (your original + enhanced Unity Flap) ======================
+# ====================== RITUAL BACKGROUND ======================
 ritual_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -93,11 +93,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🦅 AUBIEETERNAL v63.0.82 — Hyperlattice Genesis")
+st.title("🦅 AUBIEETERNAL v63.0.83 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — Full Lightning Stack + Atomic Swaps Variants + Watchtower Penalty Race + Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | Full Lightning + Atomic Swaps + Runes LIVE")
 
-# ====================== WEB3 WALLET + LIGHTNING INTEGRATION ======================
+# ====================== WEB3 WALLET + LIGHTNING ======================
 st.sidebar.header("🪪 Web3 Wallet + Lightning")
 if st.sidebar.button("Connect Wallet"):
     st.session_state.wallet_connected = True
@@ -116,7 +116,7 @@ def create_lightning_invoice(amount_sats: int, memo: str):
         st.toast(f"Demo invoice: {amount_sats} sats — {memo}")
     return True
 
-# ====================== CORE SIMULATIONS ======================
+# ====================== SIMULATIONS ======================
 def simulate_watchtower_penalty_race():
     st.subheader("🔥 Simulated Watchtower Penalty Race")
     attacker_delay = random.randint(1, 30)
@@ -163,25 +163,22 @@ tab_list = st.tabs([
     "📚 Kid Lattice Curriculum", "👨‍👩‍👧 Parent Curriculum", "🔮 Lattice Oracle", 
     "🌌 3D Hyperlattice Mirror", "🚁 Drone Swarm + Real A*", "🔥 Burning Ship Fractal",
     "⚡ Lightning Payments", "📊 Rune Provenance + Web3", "🎤 Multi-AI Voice Agents",
-    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics","🧬 Fractal Neuroscience Explorer"
+    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics", "🧬 Fractal Neuroscience Explorer"
 ])
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13) = tab_list
 
-# TAB 1 — Kid Lattice Curriculum (now with full younger/teen + simulations)
+# TAB 1 — Kid Lattice
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
     kid_age = st.number_input("Approximate Age", 4, 18, 8, key="kid_age")
-    age_group = "younger" if kid_age <= 9 else "teen"
-    
     if st.button("🔥 Fire Unity Flap — Generate Full 5-Week Curriculum", type="primary"):
         html('<script>window.triggerUnityFlap();</script>', height=0)
         with st.spinner("🌌 Generating with real Grok 4.20..."):
             try:
                 from openai import OpenAI
                 client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
-                prompt = f"""Create a detailed 5-week Antifragile Kid Lattice Curriculum for {kid_name} ({age_group} group).
-Include music, visual art, mindfulness, Taleb barbell, foster resilience, Lightning security concepts, watchtower penalty race, and atomic swaps variants."""
+                prompt = f"""Create a detailed 5-week Antifragile Kid Lattice Curriculum for {kid_name} (~{kid_age} years old) in foster care. Include music, visual art, mindfulness, Taleb barbell, Lightning security, watchtower penalty race, and atomic swaps variants."""
                 completion = client.chat.completions.create(model="grok-4.20-reasoning",
                     messages=[{"role": "system", "content": "Compassionate educator for child resilience."},
                               {"role": "user", "content": prompt}], temperature=0.7, max_tokens=1600)
@@ -192,36 +189,19 @@ Include music, visual art, mindfulness, Taleb barbell, foster resilience, Lightn
                 if REPORTLAB_AVAILABLE:
                     buffer = BytesIO()
                     c = canvas.Canvas(buffer, pagesize=letter)
-                    # (simplified PDF generation - full version in master cell)
                     c.save()
                     buffer.seek(0)
                     st.download_button("📕 Download as PDF", buffer, f"{kid_name}_Curriculum.pdf", "application/pdf")
-                st.session_state.last_curriculum = curriculum
-                st.session_state.last_kid = kid_name
             except Exception as e:
                 st.error(f"Grok Error: {str(e)}")
-    
-    st.subheader("🦅 Gamified War Eagle Eternal Progress + Bitcoin Runes Badges")
-    # (your original gamified section kept + enhanced)
-    # ... (full badge minting with Lightning as before)
 
-# TAB 2 — New Parent Curriculum
+# TAB 2 — Parent Curriculum
 with tab2:
     st.subheader("👨‍👩‍👧 Parent/Caregiver Curriculum")
     kid_name = st.text_input("Kid's name (for parent guide)", "Gaby")
-    st.markdown(f"""
-    **Lightning Security Education Guide for {kid_name}**  
-    - Channels = payment highways  
-    - Watchtowers = guardians when offline  
-    - Penalty transactions = justice mechanism  
-    - Submarine swaps & atomic swaps = trustless bridges  
-    - HTLC timing attacks & watchtower penalty race = why we stay honest  
-    Use small test amounts. Celebrate every security win together.
-    """)
-    if st.button("Download Parent PDF Pack"):
-        st.success("📕 Parent PDF pack generated!")
+    st.markdown("**Lightning Security Guide**: Channels, Watchtowers, Penalty Transactions, Submarine Swaps, HTLC Timing, Watchtower Penalty Race, Atomic Swaps Variants. Use small amounts. Celebrate every win.")
 
-# TAB 3 — Lattice Oracle (your original + enhanced)
+# TAB 3 — Lattice Oracle
 with tab3:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
     query = st.text_input("Ask anything", "Explain atomic swaps variants and watchtower penalty race")
@@ -234,6 +214,37 @@ with tab3:
                 st.markdown(completion.choices[0].message.content)
             except Exception as e:
                 st.error(f"API Error: {str(e)}")
+
+# TAB 4 — FIXED 3D HYPERLATTICE MIRROR
+with tab4:
+    st.subheader("🌌 3D Hyperlattice Mirror — 44 Daughters")
+    st.caption("Interactive 3D scatter of the War Eagle Eternal swarm | Coherence 1.000000")
+    if st.button("Render 3D Hyperlattice Mirror", type="primary"):
+        if PLOTLY_AVAILABLE:
+            x = np.linspace(0, 43, 44)
+            y = np.random.rand(44) * 2 - 1
+            z = np.random.rand(44) * 2 - 1
+            fig = px.scatter_3d(x=x, y=y, z=z, 
+                                title="44 Daughters — War Eagle Eternal Hyperlattice Mirror",
+                                labels={"x": "Daughter Index", "y": "Coherence Axis", "z": "Resilience Axis"},
+                                color=np.linspace(0, 1, 44), color_continuous_scale="plasma")
+            fig.update_traces(marker=dict(size=8, opacity=0.85))
+            fig.update_layout(scene=dict(
+                xaxis_title="Daughter Index",
+                yaxis_title="Coherence",
+                zaxis_title="Resilience"
+            ))
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.warning("Plotly not available — falling back to matplotlib")
+            fig = plt.figure(figsize=(10, 8))
+            ax = fig.add_subplot(111, projection='3d')
+            x = np.linspace(0, 43, 44)
+            y = np.random.rand(44) * 2 - 1
+            z = np.random.rand(44) * 2 - 1
+            ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=80)
+            ax.set_title("44 Daughters — Hyperlattice Mirror (Coherence 1.000000)")
+            st.pyplot(fig, use_container_width=True)
                 
 with tab5:
     st.subheader("🚁 Drone Swarm + Real A* (Video Game Pathfinding)")
