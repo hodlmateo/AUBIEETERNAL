@@ -111,10 +111,68 @@ with tab1:
         else:
             st.warning("Please enter the kid's name.")
 
-    # Gamification dashboard (kept from previous version - abbreviated for space)
-    st.subheader("🦅 Gamified War Eagle Eternal Progress")
-    # [Gamification code from previous version remains here]
-
+# ====================== EXPANDED GAMIFICATION DASHBOARD ======================
+    st.subheader("🦅 Gamified War Eagle Eternal Progress")
+    if 'tracking_db' in st.session_state and st.session_state.tracking_db:
+        kid_to_track = st.selectbox("Select Kid", list(st.session_state.tracking_db.keys()))
+        data = st.session_state.tracking_db[kid_to_track]
+       
+        # Gamification calculations
+        completed_weeks = sum(1 for w in data["weeks"].values() if w["completed"])
+        note_bonus = sum(len(w["notes"]) // 30 for w in data["weeks"].values() if w["notes"]) * 15
+        data["feathers"] = completed_weeks * 120 + note_bonus
+       
+        # Level & Avatar
+        data["level"] = min(5, data["feathers"] // 500 + 1)
+        eagle_avatars = ["🐣 Nestling", "🪶 Fledgling", "🦅 Soarer", "🌩️ Storm Rider", "🔥 Eternal War Eagle"]
+        current_avatar = eagle_avatars[data["level"] - 1]
+       
+        # Streak
+        if completed_weeks > 0:
+            data["streak"] = completed_weeks # simplified for demo
+            data["best_streak"] = max(data["best_streak"], data["streak"])
+       
+        # Badges
+        badges = data["badges"]
+        if completed_weeks >= 1 and "First Flight 🪶" not in badges: badges.append("First Flight 🪶")
+        if completed_weeks >= 3 and "Wingspan Warrior" not in badges: badges.append("Wingspan Warrior 🦅")
+        if data["streak"] >= 3 and "Storm Rider" not in badges: badges.append("Storm Rider 🌩️")
+        if data["feathers"] >= 1000 and "Eternal Guardian" not in badges: badges.append("Eternal Guardian 🔥")
+       
+        # Display
+        st.write(f"**{kid_to_track} — {current_avatar} (Level {data['level']})**")
+        st.metric("War Eagle Feathers", f"{data['feathers']} 🪶", f"+{note_bonus} from reflections")
+       
+        st.progress(min(data["feathers"] / 2500, 1.0))
+        st.caption(f"Progress to Eternal War Eagle | Current Streak: **{data['streak']}** weeks | Best: **{data['best_streak']}**")
+       
+        # Weekly tracking with gamification
+        for week in data["weeks"]:
+            with st.expander(f"{week} — Earn 120 Feathers"):
+                completed = st.checkbox("Completed", value=data["weeks"][week]["completed"], key=f"chk*{kid_to_track}*{week}")
+                notes = st.text_area("Reflection / Notes (more detail = more feathers!)", value=data["weeks"][week]["notes"], key=f"notes_{kid_to_track}*{week}")
+                date = st.date_input("Date", value=datetime.date.today() if not data["weeks"][week]["date"] else datetime.datetime.strptime(data["weeks"][week]["date"], "%Y-%m-%d").date(), key=f"date*{kid_to_track}_{week}")
+               
+                data["weeks"][week]["completed"] = completed
+                data["weeks"][week]["notes"] = notes
+                data["weeks"][week]["date"] = str(date)
+       
+        # Final actions
+        colA, colB = st.columns(2)
+        with colA:
+            if st.button("💾 Save Progress & Celebrate", type="primary"):
+                st.session_state.tracking_db[kid_to_track] = data
+                st.success("✅ Progress saved to the lattice!")
+                st.balloons()
+        with colB:
+            if st.button("🔥 Etch Full Gamified Snapshot to Rune"):
+                st.session_state.tracking_db[kid_to_track] = data
+                create_lightning_invoice(42, f"Gamified snapshot for {kid_to_track}")
+                nostr_etch(f"War Eagle Feathers: {data['feathers']} | Level {data['level']} {current_avatar} | Streak {data['streak']}", "gamified-curriculum-v63", 42)
+                st.success("Etched on-chain forever!")
+                st.balloons()
+    else:
+        st.info("Generate a curriculum first to unlock the full gamified dashboard.")
 # ====================== TAB 8: BITCOIN RUNES INTEGRATION ======================
 with tab8:
     st.subheader("📊 Bitcoin Runes Provenance & On-Chain Integration")
