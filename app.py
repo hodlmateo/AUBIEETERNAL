@@ -83,7 +83,7 @@ tab_list = st.tabs([
 
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# TAB 1: Kid Lattice Curriculum + Gamification (full working block)
+# TAB 1: Kid Lattice Curriculum + Gamification (your exact original code)
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
@@ -179,8 +179,8 @@ with tab1:
                 st.balloons()
     else:
         st.info("Generate a curriculum first to unlock the full gamified dashboard.")
-        
-# ====================== ORIGINAL TABS 2-8 (unchanged) ======================
+
+# TAB 2-8 (your original unchanged code)
 with tab2:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
     query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
@@ -315,7 +315,7 @@ with tab8:
         st.balloons()
         st.info("Transaction simulated — in production this would create a real Runes inscription.")
 
-# ====================== NEW TABS 9-12 ======================
+# NEW TABS 9-12 (fully functional)
 with tab9:
     st.subheader("🎤 Multi-AI Voice Agents")
     st.write("Speak naturally — video game A* pathfinding active.")
