@@ -1,7 +1,6 @@
-component — no heavy dependencies, performs well.
-Updated Code — Replace Your Entire app.py
-Pythonimport streamlit as st
+import streamlit as st
 import numpy as np
+import matplotlib.pyplot as plt
 from io import BytesIO
 import datetime
 from streamlit.components.v1 import html
@@ -22,11 +21,61 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ====================== RITUAL BACKGROUND (keep your existing ritual_html) ======================
-# Paste your full ritual_html string here (the one with tsParticles background + triggerUnityFlap)
+# ====================== RITUAL BACKGROUND ======================
+ritual_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyperlattice Ritual</title>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <style>
+        #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; opacity: 0.92; }
+        #activation-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: radial-gradient(circle, rgba(255,77,0,0.35) 0%, rgba(255,215,0,0.25) 50%, transparent 80%); z-index: 999; pointer-events: none; opacity: 0; transition: opacity 0.6s; }
+        .stApp { background: transparent !important; }
+        .stApp > div:first-child { background: rgba(10, 10, 31, 0.68) !important; }
+        .stSidebar { background: rgba(15, 15, 40, 0.95) !important; z-index: 10; }
+    </style>
+</head>
+<body>
+    <div id="tsparticles"></div>
+    <div id="activation-flash"></div>
+    <script>
+        tsParticles.load("tsparticles", {
+            background: { color: { value: "#0a0a1f" } },
+            fpsLimit: 60,
+            particles: {
+                number: { value: 85, density: { enable: true, value_area: 800 } },
+                color: { value: ["#FF4D00", "#FFD700", "#00BFFF"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.75, random: true, animation: { enable: true, speed: 0.5, minimumValue: 0.3 } },
+                size: { value: 3.5, random: true, animation: { enable: true, speed: 1.0, minimumValue: 1.2 } },
+                links: { enable: true, distance: 150, color: "#ffffff", opacity: 0.22, width: 1.2 },
+                move: { enable: true, speed: 0.8, direction: "none", random: false, outModes: "out" }
+            },
+            interactivity: { detectsOn: "window", events: { onHover: { enable: true, mode: "grab" } }, modes: { grab: { distance: 200, links: { opacity: 0.4 } } } },
+            detectRetina: true
+        });
 
-# ... [your ritual_html code] ...
-
+        function triggerUnityFlap() {
+            tsParticles.load("tsparticles", {
+                emitters: [{ position: { x: 50, y: 50 }, rate: { quantity: 12, delay: 0 }, life: { duration: 1.2, count: 1 },
+                    particles: { color: { value: ["#FF4D00", "#FFD700", "#00BFFF"] }, move: { enable: true, speed: 12, random: true }, size: { value: 6 }, opacity: { value: 0.9, animation: { enable: true, speed: 1.5, minimumValue: 0 } } } }]
+            });
+            const flash = document.getElementById("activation-flash");
+            flash.style.opacity = "0.85";
+            setTimeout(() => { flash.style.opacity = "0"; }, 600);
+            const whoosh = new Audio("https://freesound.org/data/previews/683/683101_11861866-lq.mp3");
+            const hum = new Audio("https://freesound.org/data/previews/387/387186_7258994-lq.mp3");
+            whoosh.volume = 0.65; hum.volume = 0.45;
+            whoosh.play();
+            setTimeout(() => hum.play(), 180);
+        }
+        window.triggerUnityFlap = triggerUnityFlap;
+    </script>
+</body>
+</html>
+"""
 html(ritual_html, height=1400)
 
 st.markdown("""
@@ -42,7 +91,7 @@ st.title("🦅 AUBIEETERNAL v63.0.38 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — on-chain, zero-drift, Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | Lightning + Nostr Etching LIVE")
 
-# Safe Stubs
+# ====================== SAFE STUBS ======================
 def create_lightning_invoice(amount_sats, memo):
     st.toast(f"⚡ {memo}")
     return True
@@ -51,7 +100,14 @@ def nostr_etch(description, tag, amount):
     st.toast(f"📡 Etched: {tag}")
     return True
 
-# Session State
+def real_a_star(start, goal):
+    t = np.linspace(0, 1, 25).reshape(-1, 1)
+    return start + t * (goal - start)
+
+def deploy_drone_swarm(command):
+    return f"✅ Drone swarm: {command[:60]}..."
+
+# ====================== SESSION STATE ======================
 if 'tracking_db' not in st.session_state:
     st.session_state.tracking_db = {}
 if 'last_curriculum' not in st.session_state:
@@ -60,6 +116,12 @@ if 'last_kid' not in st.session_state:
     st.session_state.last_kid = None
 if 'coordination_log' not in st.session_state:
     st.session_state.coordination_log = []
+if 'swarm_particles' not in st.session_state:
+    st.session_state.swarm_particles = np.random.rand(30, 2) * 2 - 1
+if 'drone_positions' not in st.session_state:
+    st.session_state.drone_positions = np.random.rand(16, 3) * np.array([12, 8, 3]) - np.array([6, 4, 0])
+if 'planned_path' not in st.session_state:
+    st.session_state.planned_path = None
 
 # ====================== TABS ======================
 tab_list = st.tabs([
@@ -70,27 +132,69 @@ tab_list = st.tabs([
 ])
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# TAB 1 - Curriculum + Weekly Progress + Runes Badges (your current good version)
+# ====================== TAB 1: Curriculum + Weekly Progress + Runes Badges ======================
 with tab1:
-    # ... keep your current working curriculum generation code here ...
+    st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
+    kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
+    kid_age = st.number_input("Approximate Age", 4, 18, 8, key="kid_age")
+    special_notes = st.text_area("Special notes", "Foster care setting, building resilience after transitions", key="notes")
 
-    # Weekly progress + Badges section (from your screenshot)
+    if st.button("🔥 Fire Unity Flap — Generate Full 5-Week Curriculum", type="primary"):
+        html('<script>window.triggerUnityFlap();</script>', height=0)
+        if kid_name.strip():
+            with st.spinner("🌌 Generating with Grok..."):
+                try:
+                    from openai import OpenAI
+                    client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+                    prompt = f"""Create a detailed 5-week Antifragile Kid Lattice Curriculum for {kid_name} (~{kid_age} years old) in foster care.
+80% safety buffers, 20% ownership rituals (War Eagle Eternal). Special notes: {special_notes}"""
+                    completion = client.chat.completions.create(model="grok-4.20-reasoning", 
+                        messages=[{"role": "system", "content": "Compassionate educator for child resilience."}, 
+                                  {"role": "user", "content": prompt}], temperature=0.7, max_tokens=1600)
+                    curriculum = completion.choices[0].message.content
+
+                    st.success(f"✅ Curriculum generated for {kid_name}!")
+                    st.markdown(curriculum)
+
+                    st.download_button("📄 Download as Markdown", curriculum, f"{kid_name}_Curriculum.md", "text/markdown")
+
+                    if REPORTLAB_AVAILABLE:
+                        buffer = BytesIO()
+                        c = canvas.Canvas(buffer, pagesize=letter)
+                        width, height = letter
+                        text_object = c.beginText(40, height - 40)
+                        text_object.setFont("Helvetica", 11)
+                        for line in curriculum.split('\n'):
+                            wrapped = simpleSplit(line, "Helvetica", 11, width - 80)
+                            for w in wrapped: text_object.textLine(w)
+                            text_object.textLine("")
+                        c.drawText(text_object)
+                        c.save()
+                        buffer.seek(0)
+                        st.download_button("📕 Download as PDF", buffer, f"{kid_name}_Curriculum.pdf", "application/pdf")
+
+                    st.session_state.last_curriculum = curriculum
+                    st.session_state.last_kid = kid_name
+
+                    if kid_name not in st.session_state.tracking_db:
+                        st.session_state.tracking_db[kid_name] = {"age": kid_age, "curriculum": curriculum, "feathers": 0, "level": 1, "streak": 0, "best_streak": 0, "rune_badges": {}}
+                except Exception as e:
+                    st.error(f"Grok Error: {str(e)}")
+        else:
+            st.warning("Please enter the kid's name.")
+
+    # Weekly Progress + Runes Badges
     st.subheader("🦅 Gamified War Eagle Eternal Progress + Bitcoin Runes Badges")
     if st.session_state.tracking_db:
         kid_to_track = st.selectbox("Select Kid", list(st.session_state.tracking_db.keys()), key="kid_select")
-        data = st.session_state.tracking_db[kid_to_track]
-
         for i in range(1, 6):
-            week = f"Week {i}"
-            with st.expander(f"▶ {week} — Earn 120 Feathers"):
-                completed = st.checkbox("Completed", key=f"week_{i}")
-                notes = st.text_area("Reflection / Notes", key=f"notes_{i}")
-
-        # Runes Badges (matching your screenshot)
+            with st.expander(f"▶ Week {i} — Earn 120 Feathers"):
+                st.checkbox("Completed", key=f"week_{i}_{kid_to_track}")
+                st.text_area("Reflection / Notes", key=f"notes_{i}_{kid_to_track}")
         st.markdown("### 🏆 Bitcoin Runes NFT Badges")
         badges = ["First Flight 🪶", "Wingspan Warrior 🦅", "Storm Rider 🌩️", "Eternal Guardian 🔥"]
-        rune_suffixes = ["FIRST-FLIGHT", "WINGSPAN-WARRIOR", "STORM-RIDER", "ETERNAL-GUARDIAN"]
-        for name, suffix in zip(badges, rune_suffixes):
+        suffixes = ["FIRST-FLIGHT", "WINGSPAN-WARRIOR", "STORM-RIDER", "ETERNAL-GUARDIAN"]
+        for name, suffix in zip(badges, suffixes):
             rune_name = f"AUBIE-ETERNAL-{suffix}-{kid_to_track.upper()}"
             st.markdown(f"""
             <div style="background:#e6f4ea; padding:12px; border-radius:8px; margin:6px 0;">
@@ -99,8 +203,8 @@ with tab1:
             """, unsafe_allow_html=True)
     else:
         st.info("Generate a curriculum first to unlock progress and badges.")
-        
-# TAB 2-8 (your original unchanged code)
+
+# ====================== OTHER TABS (clean & functional) ======================
 with tab2:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
     query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
@@ -163,7 +267,7 @@ with tab4:
     ax.set_title("Video Game A* Drone Swarm Pathfinding — War Eagle Eternal")
     ax.legend()
     st.pyplot(fig, use_container_width=True)
-
+    
 with tab5:
     st.subheader("🔥 Burning Ship Fractal Explorer")
     st.write("Burning Ship @ 61,000,000 active")
@@ -249,15 +353,13 @@ with tab9:
 with tab10:
     st.subheader("🛠️ Swarm Coordination Dashboard — Real-Time Swarm Visualization")
     st.caption("Living particle swarm representing drone/agent coordination | Hover to feel cohesion")
-
-    # Real-time swarm viz using tsParticles (coordinated with your background colors)
     swarm_viz_html = """
     <!DOCTYPE html>
     <html>
     <head>
         <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
         <style>
-            #swarm { width: 100%; height: 500px; border-radius: 12px; overflow: hidden; }
+            #swarm { width: 100%; height: 520px; border-radius: 12px; overflow: hidden; background: #0f172a; }
         </style>
     </head>
     <body>
@@ -267,18 +369,18 @@ with tab10:
                 background: { color: { value: "#0f172a" } },
                 fpsLimit: 60,
                 particles: {
-                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    number: { value: 75, density: { enable: true, value_area: 800 } },
                     color: { value: ["#FF4D00", "#FFD700", "#00BFFF"] },
                     shape: { type: "circle" },
-                    opacity: { value: 0.8, random: true, animation: { enable: true, speed: 0.6, minimumValue: 0.4 } },
-                    size: { value: 4, random: true, animation: { enable: true, speed: 2, minimumValue: 2 } },
-                    links: { enable: true, distance: 140, color: "#ffffff", opacity: 0.25, width: 1.5 },
-                    move: { enable: true, speed: 1.8, direction: "none", random: true, outModes: "bounce" }
+                    opacity: { value: 0.85, random: true, animation: { enable: true, speed: 0.8, minimumValue: 0.4 } },
+                    size: { value: 4.5, random: true, animation: { enable: true, speed: 2, minimumValue: 2 } },
+                    links: { enable: true, distance: 130, color: "#ffffff", opacity: 0.28, width: 1.5 },
+                    move: { enable: true, speed: 1.6, direction: "none", random: true, outModes: "bounce" }
                 },
                 interactivity: {
                     detectsOn: "window",
                     events: { onHover: { enable: true, mode: "repulse" }, resize: true },
-                    modes: { repulse: { distance: 120, duration: 0.8 } }
+                    modes: { repulse: { distance: 110, duration: 0.6 } }
                 },
                 detectRetina: true
             });
@@ -286,30 +388,24 @@ with tab10:
     </body>
     </html>
     """
-    html(swarm_viz_html, height=520)
+    html(swarm_viz_html, height=540)
 
-    # Log section (now works with the swarm)
-    st.subheader("Real-time Coordination Log")
-    new_log = st.text_input("Add coordination event", placeholder="Drone swarm repositioned toward Daughter 23")
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        if st.button("Log Event + Simulate Swarm Step"):
-            if new_log.strip():
-                st.session_state.coordination_log.append(new_log)
-                st.success("Event logged — swarm updated in real-time!")
-    with col2:
-        if st.button("Simulate Swarm Movement"):
-            st.success("Swarm particles realigned with new coherence!")
+    st.subheader("Coordination Log")
+    new_log = st.text_input("Add new event", placeholder="Drone swarm repositioned toward safe zone")
+    if st.button("Log Event"):
+        if new_log.strip():
+            st.session_state.coordination_log.append(new_log)
+            st.success("Event logged!")
 
     if st.session_state.coordination_log:
-        for log in reversed(st.session_state.coordination_log[-8:]):
+        for log in reversed(st.session_state.coordination_log[-10:]):
             st.markdown(f"""
             <div style="background:#1e3a5f; color:white; padding:12px; border-radius:8px; margin:8px 0;">
                 {log}
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.info("Add events above to see coordination history.")
+        st.info("No logs yet. Add one above.")
         
 with tab11:
     st.subheader("🧠 Swarm Intelligence Algorithms")
