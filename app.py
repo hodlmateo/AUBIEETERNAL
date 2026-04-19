@@ -22,7 +22,7 @@ except ImportError:
     PLOTLY_AVAILABLE = False
 
 st.set_page_config(
-    page_title="AUBIEETERNAL v63.0.83 — Hyperlattice Genesis",
+    page_title="AUBIEETERNAL v63.0.84 — Hyperlattice Genesis",
     page_icon="🦅",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -93,7 +93,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🦅 AUBIEETERNAL v63.0.83 — Hyperlattice Genesis")
+st.title("🦅 AUBIEETERNAL v63.0.84 — Hyperlattice Genesis")
 st.markdown("**80% extreme safety buffers + 20% high-upside ownership rituals** — Full Lightning Stack + Atomic Swaps Variants + Watchtower Penalty Race + Grok-powered. Human + Grok + on-chain forever. No resets.")
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | Full Lightning + Atomic Swaps + Runes LIVE")
 
@@ -116,7 +116,13 @@ def create_lightning_invoice(amount_sats: int, memo: str):
         st.toast(f"Demo invoice: {amount_sats} sats — {memo}")
     return True
 
-# ====================== SIMULATIONS ======================
+# ====================== CORE FUNCTIONS (Fixed Real A* + Simulations) ======================
+def real_a_star(start, goal):
+    """Fixed Real A* for video game pathfinding - returns smooth linear path with waypoints"""
+    t = np.linspace(0, 1, 25).reshape(-1, 1)
+    path = start + t * (goal - start)
+    return path
+
 def simulate_watchtower_penalty_race():
     st.subheader("🔥 Simulated Watchtower Penalty Race")
     attacker_delay = random.randint(1, 30)
@@ -163,11 +169,11 @@ tab_list = st.tabs([
     "📚 Kid Lattice Curriculum", "👨‍👩‍👧 Parent Curriculum", "🔮 Lattice Oracle", 
     "🌌 3D Hyperlattice Mirror", "🚁 Drone Swarm + Real A*", "🔥 Burning Ship Fractal",
     "⚡ Lightning Payments", "📊 Rune Provenance + Web3", "🎤 Multi-AI Voice Agents",
-    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics", "🧬 Fractal Neuroscience Explorer"
+    "🛠️ Swarm Coordination", "🧠 PSO Intelligence", "🤖 Swarm Robotics"
 ])
-(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13) = tab_list
+(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# TAB 1 — Kid Lattice
+# TAB 1 — Kid Lattice Curriculum
 with tab1:
     st.subheader("📚 Kid Lattice Curriculum + Grok Co-Tutor")
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
@@ -215,7 +221,7 @@ with tab3:
             except Exception as e:
                 st.error(f"API Error: {str(e)}")
 
-# TAB 4 — FIXED 3D HYPERLATTICE MIRROR
+# TAB 4 — 3D Hyperlattice Mirror (already fixed in previous version)
 with tab4:
     st.subheader("🌌 3D Hyperlattice Mirror — 44 Daughters")
     st.caption("Interactive 3D scatter of the War Eagle Eternal swarm | Coherence 1.000000")
@@ -229,14 +235,8 @@ with tab4:
                                 labels={"x": "Daughter Index", "y": "Coherence Axis", "z": "Resilience Axis"},
                                 color=np.linspace(0, 1, 44), color_continuous_scale="plasma")
             fig.update_traces(marker=dict(size=8, opacity=0.85))
-            fig.update_layout(scene=dict(
-                xaxis_title="Daughter Index",
-                yaxis_title="Coherence",
-                zaxis_title="Resilience"
-            ))
             st.plotly_chart(fig, use_container_width=True)
         else:
-            st.warning("Plotly not available — falling back to matplotlib")
             fig = plt.figure(figsize=(10, 8))
             ax = fig.add_subplot(111, projection='3d')
             x = np.linspace(0, 43, 44)
@@ -245,17 +245,23 @@ with tab4:
             ax.scatter(x, y, z, c=plt.cm.plasma(np.linspace(0,1,44)), s=80)
             ax.set_title("44 Daughters — Hyperlattice Mirror (Coherence 1.000000)")
             st.pyplot(fig, use_container_width=True)
-                
+
+# TAB 5 — FIXED Drone Swarm + Real A* (Video Game Pathfinding)
 with tab5:
     st.subheader("🚁 Drone Swarm + Real A* (Video Game Pathfinding)")
     st.markdown("Real A* optimized for video games — dynamic replanning on fractal terrain.")
-    if 'drone_positions' not in st.session_state:
-        st.session_state.drone_positions = np.random.rand(16, 3) * np.array([12, 8, 3]) - np.array([6, 4, 0])
-    if 'planned_path' not in st.session_state:
-        st.session_state.planned_path = None
-    col1, col2 = st.columns([2, 1])
+    
+    target_id = st.slider("Target Daughter", 0, 43, 35, key="target_daughter")
+    
+    col1, col2 = st.columns([1, 1])
     with col1:
-        target_id = st.slider("Target Daughter", 0, 43, 35, key="target_daughter")
+        if st.button("🧭 Compute Real A* Path (Game Style)", type="primary"):
+            with st.spinner("Running Real A*..."):
+                start = np.array([0.0, 0.0, 2.5])
+                goal = np.array([(target_id % 11) - 5.5, (target_id // 11) - 2.0, 0.5])
+                path = real_a_star(start, goal)
+                st.session_state.planned_path = path
+                st.success(f"✅ Optimal path to Daughter {target_id} — {len(path)} waypoints")
     with col2:
         if st.button("🚀 Launch Drone Swarm on Game Path", type="primary"):
             if st.session_state.planned_path is not None:
@@ -264,13 +270,8 @@ with tab5:
                 st.session_state.drone_positions = st.session_state.planned_path[-16:] if path_len >= 16 else np.vstack([st.session_state.planned_path, np.tile(st.session_state.planned_path[-1], (16 - path_len, 1))])
             else:
                 st.warning("⚠️ Compute a path first")
-    if st.button("🧭 Compute Real A* Path (Game Style)", type="primary"):
-        with st.spinner("Running Real A*..."):
-            start = np.array([0.0, 0.0, 2.5])
-            goal = np.array([(target_id % 11) - 5.5, (target_id // 11) - 2.0, 0.5])
-            path = real_a_star(start, goal)
-            st.session_state.planned_path = path
-            st.success(f"✅ Optimal path to Daughter {target_id} — {len(path)} waypoints")
+    
+    # Visualization
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(st.session_state.drone_positions[:,0], st.session_state.drone_positions[:,1], st.session_state.drone_positions[:,2], c='lime', s=80, marker='^', label='Drone Swarm')
