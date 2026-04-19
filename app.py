@@ -10,6 +10,7 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+
 try:
     from reportlab.lib.pagesizes import letter
     from reportlab.pdfgen import canvas
@@ -25,7 +26,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for bigger button + better look
+# Custom CSS
 st.markdown("""
 <style>
     .stApp { max-width: 100% !important; }
@@ -50,19 +51,20 @@ st.markdown("""
 st.title("🦅 AUBIEETERNAL v63.0.38 — Hyperlattice Genesis")
 
 st.markdown("""
-**Welcome to the Kid Lattice Curriculum Generator**  
+**Welcome to the Kid Lattice Curriculum Generator**
 
 This tool creates a **5-week Antifragile Kid Lattice Curriculum** powered by real Grok.  
-It blends **vagus nerve safety rituals**, **fractal play**, and **ownership practices** — with **80% extreme safety buffers** + **20% high-upside War Eagle Eternal rituals**.  
+It blends **vagus nerve safety rituals**, **fractal play**, and **ownership practices** — with **80% extreme safety buffers** + **20% high-upside War Eagle Eternal rituals**.
 
-Everything is designed for resilience, especially in foster care or transition settings. Human + Grok + on-chain forever. Zero drift.
+Everything is designed for resilience, especially in foster care or transition settings.  
+Human + Grok + on-chain forever. Zero drift.
 """)
 
 st.success("🟢 Ultra Heartbeat ACTIVE — Swarm coherence locked at 1.000000 | Resilience 100.0 | Burning Ship 61,000,000 | Lightning + Nostr Etching LIVE")
 
 st.caption("⚠️ Not medical advice. For educational and wellness exploration only. Consult professionals when needed.")
 
-# ====================== SAFE STUBS (unchanged) ======================
+# ====================== SAFE STUBS ======================
 def create_lightning_invoice(amount_sats, memo):
     st.toast(f"⚡ Lightning invoice {amount_sats} sats created: {memo}")
     return True
@@ -79,7 +81,7 @@ def real_a_star(start, goal, max_iter=1000):
 def deploy_drone_swarm(command):
     return f"✅ Drone swarm deployed on command: {command[:60]}... | Video-game A* path active"
 
-# Session state init (unchanged)
+# Initialize session state
 if 'tracking_db' not in st.session_state:
     st.session_state.tracking_db = {}
 if 'coordination_log' not in st.session_state:
@@ -97,24 +99,32 @@ with st.sidebar:
     
     kid_name = st.text_input("Kid's Name", "Gaby", key="kid_name_curr")
     kid_age = st.number_input("Approximate Age", 4, 18, 8, key="kid_age")
-    special_notes = st.text_area("Special Notes / Context", 
-                                 "Foster care setting, building resilience after transitions", 
-                                 key="notes", height=120)
+    special_notes = st.text_area(
+        "Special Notes / Context", 
+        "Foster care setting, building resilience after transitions", 
+        key="notes", 
+        height=120
+    )
     
     st.divider()
     
-    if st.button("🚀 Generate Full 5-Week Antifragile Kid Lattice Curriculum", 
-                 type="primary", 
-                 use_container_width=True):
+    if st.button(
+        "🚀 Generate Full 5-Week Antifragile Kid Lattice Curriculum",
+        type="primary",
+        use_container_width=True
+    ):
         if kid_name.strip():
             with st.spinner("Generating with real Grok 4.20... This may take 10-20 seconds"):
                 try:
                     from openai import OpenAI
-                    client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+                    client = OpenAI(
+                        api_key=st.secrets["XAI_API_KEY"], 
+                        base_url="https://api.x.ai/v1"
+                    )
                     
                     prompt = f"""You are a compassionate, expert educator specializing in child resilience, Polyvagal Theory, and playful fractal learning.
 
-Create a **warm, engaging, and well-structured 5-week curriculum** for {kid_name} (approximately {kid_age} years old).
+Create a warm, engaging, and well-structured 5-week curriculum for {kid_name} (approximately {kid_age} years old).
 Special context: {special_notes}
 
 Requirements:
@@ -156,25 +166,39 @@ Output in clean markdown with plenty of emojis for kid appeal."""
                     
                     st.success(f"✅ Beautiful curriculum generated for {kid_name}! Coherence locked at 1.000000")
                     
-                    # Show nicely formatted output
                     with st.container():
                         st.markdown('<div class="curriculum-output">', unsafe_allow_html=True)
                         st.markdown(curriculum)
                         st.markdown('</div>', unsafe_allow_html=True)
                     
                     # Downloads
-                    st.download_button("📄 Download as Markdown", curriculum, 
-                                     f"{kid_name}_Kid_Lattice_Curriculum.md", "text/markdown")
+                    st.download_button(
+                        "📄 Download as Markdown", 
+                        curriculum, 
+                        f"{kid_name}_Kid_Lattice_Curriculum.md", 
+                        "text/markdown"
+                    )
                     
                     if REPORTLAB_AVAILABLE:
-                        # PDF generation code (your original) stays here...
                         buffer = BytesIO()
                         c = canvas.Canvas(buffer, pagesize=letter)
-                        # ... (keep your existing PDF code)
+                        width, height = letter
+                        text_object = c.beginText(40, height - 40)
+                        text_object.setFont("Helvetica", 11)
+                        for line in curriculum.split('\n'):
+                            wrapped = simpleSplit(line, "Helvetica", 11, width - 80)
+                            for w in wrapped:
+                                text_object.textLine(w)
+                            text_object.textLine("")
+                        c.drawText(text_object)
                         c.save()
                         buffer.seek(0)
-                        st.download_button("📕 Download as PDF", buffer, 
-                                         f"{kid_name}_Kid_Lattice_Curriculum.pdf", "application/pdf")
+                        st.download_button(
+                            "📕 Download as PDF", 
+                            buffer, 
+                            f"{kid_name}_Kid_Lattice_Curriculum.pdf", 
+                            "application/pdf"
+                        )
                     
                 except Exception as e:
                     st.error(f"Grok Error: {str(e)}")
@@ -183,7 +207,7 @@ Output in clean markdown with plenty of emojis for kid appeal."""
 
     st.caption("War Eagle Eternal 🦅 — 80% Safety + 20% Ownership")
 
-# ====================== MAIN TABS (rest unchanged) ======================
+# ====================== TABS ======================
 tab_list = st.tabs([
     "📚 Kid Lattice Curriculum",
     "🔮 Lattice Oracle",
@@ -201,66 +225,68 @@ tab_list = st.tabs([
 
 (tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
 
-# TAB 1 now mostly shows progress/gamification (generation moved to sidebar)
 with tab1:
     st.subheader("📚 Your Generated Curriculums & Gamified Progress")
     st.info("Use the sidebar to generate a new curriculum. Generated ones appear here for tracking.")
     
     if st.session_state.tracking_db:
         kid_to_track = st.selectbox("Select Kid to Track Progress", list(st.session_state.tracking_db.keys()))
-        # ... rest of your gamification code stays exactly the same
-        # (I didn't change the tracking part)
+        data = st.session_state.tracking_db[kid_to_track]
         
-        # Paste your existing gamified progress code here (from st.subheader("🦅 Gamified War Eagle Eternal Progress") downward)
-        # ...    st.subheader("🦅 Gamified War Eagle Eternal Progress")
-    if st.session_state.tracking_db:
-        kid_to_track = st.selectbox("Select Kid", list(st.session_state.tracking_db.keys()))
-        data = st.session_state.tracking_db[kid_to_track]
-        completed_weeks = sum(1 for w in data["weeks"].values() if w["completed"])
-        note_bonus = sum(len(w["notes"]) // 30 for w in data["weeks"].values() if w["notes"]) * 15
-        data["feathers"] = completed_weeks * 120 + note_bonus
-        data["level"] = min(5, data["feathers"] // 500 + 1)
-        eagle_avatars = ["🐣 Nestling", "🪶 Fledgling", "🦅 Soarer", "🌩️ Storm Rider", "🔥 Eternal War Eagle"]
-        current_avatar = eagle_avatars[data["level"] - 1]
-        if completed_weeks > 0:
-            data["streak"] = completed_weeks
-            data["best_streak"] = max(data["best_streak"], data["streak"])
-        badges = data["badges"]
-        if completed_weeks >= 1 and "First Flight 🪶" not in badges: badges.append("First Flight 🪶")
-        if completed_weeks >= 3 and "Wingspan Warrior" not in badges: badges.append("Wingspan Warrior 🦅")
-        if data["streak"] >= 3 and "Storm Rider" not in badges: badges.append("Storm Rider 🌩️")
-        if data["feathers"] >= 1000 and "Eternal Guardian" not in badges: badges.append("Eternal Guardian 🔥")
-       
-        st.write(f"**{kid_to_track} — {current_avatar} (Level {data['level']})**")
-        st.metric("War Eagle Feathers", f"{data['feathers']} 🪶", f"+{note_bonus} from reflections")
-        st.progress(min(data["feathers"] / 2500, 1.0))
-        st.caption(f"Progress to Eternal War Eagle | Current Streak: **{data['streak']}** weeks | Best: **{data['best_streak']}**")
-       
-        for week in data["weeks"]:
-            with st.expander(f"{week} — Earn 120 Feathers"):
-                completed = st.checkbox("Completed", value=data["weeks"][week]["completed"], key=f"chk*{kid_to_track}*{week}")
-                notes = st.text_area("Reflection / Notes", value=data["weeks"][week]["notes"], key=f"notes_{kid_to_track}*{week}")
-                date = st.date_input("Date", value=datetime.date.today() if not data["weeks"][week]["date"] else datetime.datetime.strptime(data["weeks"][week]["date"], "%Y-%m-%d").date(), key=f"date*{kid_to_track}_{week}")
-                data["weeks"][week]["completed"] = completed
-                data["weeks"][week]["notes"] = notes
-                data["weeks"][week]["date"] = str(date)
-       
-        colA, colB = st.columns(2)
-        with colA:
-            if st.button("💾 Save Progress & Celebrate", type="primary"):
-                st.session_state.tracking_db[kid_to_track] = data
-                st.success("✅ Progress saved to the lattice!")
-                st.balloons()
-        with colB:
-            if st.button("🔥 Etch Full Gamified Snapshot to Rune"):
-                st.session_state.tracking_db[kid_to_track] = data
-                create_lightning_invoice(42, f"Gamified snapshot for {kid_to_track}")
-                nostr_etch(f"War Eagle Feathers: {data['feathers']} | Level {data['level']} {current_avatar} | Streak {data['streak']}", "gamified-curriculum-v63", 42)
-                st.success("Etched on-chain forever!")
-                st.balloons()
-    else:
-        st.info("Generate a curriculum first to unlock the full gamified dashboard.")
-# TAB 2-8 (your original unchanged code)
+        # Your gamification logic (cleaned)
+        completed_weeks = sum(1 for w in data["weeks"].values() if w["completed"])
+        note_bonus = sum(len(w["notes"]) // 30 for w in data["weeks"].values() if w["notes"]) * 15
+        data["feathers"] = completed_weeks * 120 + note_bonus
+        data["level"] = min(5, data["feathers"] // 500 + 1)
+        
+        eagle_avatars = ["🐣 Nestling", "🪶 Fledgling", "🦅 Soarer", "🌩️ Storm Rider", "🔥 Eternal War Eagle"]
+        current_avatar = eagle_avatars[data["level"] - 1]
+        
+        if completed_weeks > 0:
+            data["streak"] = completed_weeks
+            data["best_streak"] = max(data["best_streak"], data["streak"])
+        
+        badges = data["badges"]
+        if completed_weeks >= 1 and "First Flight 🪶" not in badges:
+            badges.append("First Flight 🪶")
+        if completed_weeks >= 3 and "Wingspan Warrior" not in badges:
+            badges.append("Wingspan Warrior 🦅")
+        if data["streak"] >= 3 and "Storm Rider" not in badges:
+            badges.append("Storm Rider 🌩️")
+        if data["feathers"] >= 1000 and "Eternal Guardian" not in badges:
+            badges.append("Eternal Guardian 🔥")
+        
+        st.write(f"**{kid_to_track} — {current_avatar} (Level {data['level']})**")
+        st.metric("War Eagle Feathers", f"{data['feathers']} 🪶", f"+{note_bonus} from reflections")
+        st.progress(min(data["feathers"] / 2500, 1.0))
+        st.caption(f"Progress to Eternal War Eagle | Current Streak: **{data['streak']}** weeks | Best: **{data['best_streak']}**")
+        
+        for week in data["weeks"]:
+            with st.expander(f"{week} — Earn 120 Feathers"):
+                completed = st.checkbox("Completed", value=data["weeks"][week]["completed"], key=f"chk_{kid_to_track}_{week}")
+                notes = st.text_area("Reflection / Notes", value=data["weeks"][week]["notes"], key=f"notes_{kid_to_track}_{week}")
+                date = st.date_input("Date", value=datetime.date.today() if not data["weeks"][week]["date"] else datetime.datetime.strptime(data["weeks"][week]["date"], "%Y-%m-%d").date(), key=f"date_{kid_to_track}_{week}")
+                data["weeks"][week]["completed"] = completed
+                data["weeks"][week]["notes"] = notes
+                data["weeks"][week]["date"] = str(date)
+        
+        colA, colB = st.columns(2)
+        with colA:
+            if st.button("💾 Save Progress & Celebrate", type="primary"):
+                st.session_state.tracking_db[kid_to_track] = data
+                st.success("✅ Progress saved to the lattice!")
+                st.balloons()
+        with colB:
+            if st.button("🔥 Etch Full Gamified Snapshot to Rune"):
+                st.session_state.tracking_db[kid_to_track] = data
+                create_lightning_invoice(42, f"Gamified snapshot for {kid_to_track}")
+                nostr_etch(f"War Eagle Feathers: {data['feathers']} | Level {data['level']} {current_avatar} | Streak {data['streak']}", "gamified-curriculum-v63", 42)
+                st.success("Etched on-chain forever!")
+                st.balloons()
+    else:
+        st.info("Generate a curriculum first to unlock the full gamified dashboard.")
+
+# ====================== Keep your other tabs (2-12) exactly as before ======================
 with tab2:
     st.subheader("🔮 Lattice Oracle (real Grok 4.20)")
     query = st.text_input("Ask anything", "Explain 80/20 barbell ritual for kids")
