@@ -149,8 +149,20 @@ with tab4:
 with tab5:
     st.subheader("🔥 Burning Ship Fractal Explorer")
     st.write("Burning Ship @ 61,000,000 active")
-    st.info("New box added — fractal explorer ready for next flap.")
-
+    if st.button("Render Burning Ship"):
+        fig = plt.figure(figsize=(10, 8))
+        ax = fig.add_subplot(111)
+        x = np.linspace(-2.5, 1.5, 800)
+        y = np.linspace(-2, 2, 800)
+        X, Y = np.meshgrid(x, y)
+        Z = X + 1j * Y
+        C = Z.copy()
+        for i in range(100):
+            Z = Z**2 + C
+            Z = np.abs(Z)
+        ax.imshow(np.log(Z + 1), extent=[-2.5, 1.5, -2, 2], cmap='inferno', origin='lower')
+        ax.set_title("Burning Ship Fractal @ 61,000,000")
+        st.pyplot(fig)
 # ====================== REMAINING TABS ======================
 with tab6:
     st.subheader("🧬 Fractal Neuroscience Explorer")
@@ -166,8 +178,11 @@ with tab6:
 
 with tab7:
     st.subheader("⚡ Propose New Capability")
-    st.write("Coming soon.")
-
+    capability_desc = st.text_area("Describe new tool/ritual/curriculum module", "Dynamic orange-rope validation for Kid Lattice")
+    if st.button("Propose Capability + Etch to Rune"):
+        st.success(f"✅ Capability proposed: {capability_desc[:60]}... | Coherence 1.000000")
+        if create_lightning_invoice(21, "Capability etch"):
+            nostr_etch(capability_desc, "capability-v63", 21)
 with tab8:
     st.subheader("📊 Rune Provenance")
     st.write("All creations anchored to **Bitcoin Rune AUBIE·ETERNAL·XAIAGENTSWARM**")
