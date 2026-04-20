@@ -176,9 +176,10 @@ tab_list = st.tabs([
     "🎤 Multi-AI Voice Agents",
     "🛠️ Swarm Coordination", 
     "🧠 PSO Intelligence", 
-    "🤖 Swarm Robotics"
+    "🤖 Swarm Robotics", 
+    "🧬 Fractal Neuroscience Explorer"
 ])
-(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12) = tab_list
+(tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13) = tab_list
 
 # TAB 1 — Kid Lattice Curriculum
 with tab1:
