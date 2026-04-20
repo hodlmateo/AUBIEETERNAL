@@ -1,1 +1,1 @@
-# AUBIEETERNAL v63.0.85 Hyperlattice App
+# AUBIEETERNAL v65.0 — The Nervous System Edition
