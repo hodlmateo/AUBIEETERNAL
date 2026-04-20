@@ -340,7 +340,7 @@ with tab8:
         if st.button("Explore Atomic Swaps Variants"):
             explore_atomic_swaps_variants()
             
-# NEW TABS 9-12 (fully functional)
+# NEW TABS 9-13 (fully functional)
 with tab9:
     st.subheader("🎤 Multi-AI Voice Agents")
     audio_value = st.audio_input("Press and speak")
