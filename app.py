@@ -163,7 +163,7 @@ if 'drone_positions' not in st.session_state:
 if 'planned_path' not in st.session_state:
     st.session_state.planned_path = None
 
-# ====================== TABS (exactly 12 - fixed unpacking) ======================
+# ====================== TABS (exactly 13 - fixed unpacking) ======================
 tab_list = st.tabs([
     "📚 Kid Lattice Curriculum", 
     "👨‍👩‍👧 Parent Curriculum", 
