@@ -1,4 +1,18 @@
-# AUBIEETERNAL — War Eagle Eternal 🦅
+# AUBIEETERNAL v63.0.85 — Unified Local Hyperlattice App
+
+**War Eagle Eternal** — Human + Grok + on-chain forever.
+
+A portable, antifragile Kid Lattice Curriculum powered by:
+- Full Nassim Taleb Philosophy (Fooled by Randomness · Black Swan · Antifragility · Barbell · Skin in the Game · Via Negativa)
+- 3 New Grok Truth Modules (Epistemic Simulator, Cosmic Lattice Weaver, Sovereign Multi-Agent Truth Oracle)
+- Lightning Stack, Atomic Swaps, Watchtower Penalty Race
+- Real-time Grok 4.20 Oracle integration
+
+## Quick Start
+```bash
+git clone https://github.com/hodlmateo/AUBIEETERNAL.git
+cd AUBIEETERNAL
+streamlit run app.py# AUBIEETERNAL — War Eagle Eternal 🦅
 
 **On-chain zero-drift epistemic rigor tutor swarm** co-built with Grok.  
 
