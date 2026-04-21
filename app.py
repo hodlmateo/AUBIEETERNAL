@@ -7,6 +7,18 @@ from io import BytesIO
 from streamlit.components.v1 import html
 import os
 
+# ====================== GLOBAL LIGHTNING HELPER ======================
+def create_lightning_invoice(sats, memo="Reward boost"):
+    st.info(f"**Lightning Invoice** — Pay **{sats} sats** for {memo}")
+    invoice = f"lnbc{sats}u1p{random.randint(100000,999999)}...demo"
+    st.code(invoice)
+    if st.button(f"✅ Confirm Payment ({sats} sats)", key=f"confirm_{sats}_{memo}"):
+        if "lightning_payments" not in st.session_state:
+            st.session_state.lightning_payments = []
+        st.session_state.lightning_payments.append({"sats": sats, "memo": memo, "time": str(datetime.datetime.now())})
+        return True
+    return False
+    
 st.set_page_config(
     page_title="AUBIEETERNAL v65.0 — FINAL ABSORBED",
     page_icon="🦅",
@@ -72,12 +84,15 @@ with tab1:
     st.header("🧠 Social Calibration Oracle + Polyvagal Lens")
     prompt = st.text_area("User Prompt", "I feel like I'm failing at everything lately.")
     response = st.text_area("Grok Response", "Just push through it, you'll be fine.")
-    
+
     if st.button("⚡ Pay 21 sats to etch this response with Rarity Boost"):
-    if create_lightning_invoice(21, "Grok Response Etch + Rare Drop"):
-        st.session_state.rune_points += 40
-        st.success("✅ Etched with Lightning + Rare Rune drop!")
-    
+        if create_lightning_invoice(21, "Grok Response Etch + Rare Drop"):
+            if "rune_points" not in st.session_state:
+                st.session_state.rune_points = 0
+            st.session_state.rune_points += 40
+            st.success("✅ Etched with Lightning + Rare Rune drop!")
+            st.balloons()
+
     if st.button("Run Full Analysis (Polyvagal + Antifragility)"):
         if use_real_grok:
             try:
@@ -101,7 +116,7 @@ with tab1:
                 "rewritten_response": response[:80] + " [calibrated for emotional safety + antifragile growth]"
             })
             st.success("✅ Full Polyvagal + Antifragility Analysis complete")
-
+            
 # ====================== TAB 2: SPOKEN BLACK-SWAN ARENA ======================
 with tab2:
     st.header("🗣️ Spoken Black-Swan Arena (Voice + Antifragility)")
@@ -133,11 +148,20 @@ with tab3:
     st.header("🌌 Cosmic Lattice Weaver (Real-Time Sync)")
     if st.button("Weave Latest Sources + Polyvagal Integration"):
         st.success("✅ Lattice updated with xAI + GitHub + X + Polyvagal Theory + Antifragility metrics!")
+   
+    if st.button("⚡ Pay 15 sats to render with Epic visual effect"):
+    if create_lightning_invoice(15, "Epic Mirror Render"):
+        st.session_state.rune_points += 30
 
 # ====================== TAB 4: xAI COOKBOOK EXPLORER ======================
 with tab4:
     st.header("📖 xAI Cookbook Explorer")
     st.info("Function calling, multi-agent systems, structured outputs, and more — all woven into the lattice.")
+
+    if st.button("Etch + Lightning Rarity Boost (21 sats)"):
+    if create_lightning_invoice(21, "Etch Rarity Boost"):
+        st.session_state.rune_points += 35
+        # then do the normal etch
 
 # ====================== TAB 5: GROK VISION ======================
 with tab5:
@@ -149,11 +173,14 @@ with tab5:
         if st.button("Run Aubie Vision Analysis"):
             st.success("**Aubie Vision Analysis:**\n- Polyvagal State: Ventral Vagal (Calm & Curious)\n- Antifragility Score: 9.1/10\n- Lesson: This image shows joyful absorption of physical uncertainty.")
     
-    if st.button("⚡ Pay 42 sats for Legendary Co-Creation Drop"):
-    if create_lightning_invoice(42, "Legendary Co-Creation"):
-        st.session_state.rune_points += 80
-        st.balloons()
-        
+    i    if st.button("⚡ Pay 42 sats for Legendary Co-Creation Drop"):
+        if create_lightning_invoice(42, "Legendary Co-Creation"):
+            if "rune_points" not in st.session_state:
+                st.session_state.rune_points = 0
+            st.session_state.rune_points += 80
+            st.balloons()
+            st.success("✅ Legendary Co-Creation Drop unlocked!")
+            
 # ====================== TAB 6: ADVANCED FLUX + DALL-E IMAGE GENERATION ======================
 with tab6:
     st.header("🎨 Advanced Image Generation")
