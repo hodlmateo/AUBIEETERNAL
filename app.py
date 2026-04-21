@@ -195,23 +195,25 @@ The universe trends toward entropy. Use **Via Negativa** and prepare for **Black
 # ====================== TAB 3: COSMIC LATTICE WEAVER ======================
 with tab3:
     st.header("🌌 Cosmic Lattice Weaver (Real-Time Sync)")
+    
     if st.button("Weave Latest Sources + Polyvagal Integration"):
         st.success("✅ Lattice updated with xAI + GitHub + X + Polyvagal Theory + Antifragility metrics!")
-   
+    
     if st.button("⚡ Pay 15 sats to render with Epic visual effect"):
-    if create_lightning_invoice(15, "Epic Mirror Render"):
-        st.session_state.rune_points += 30
-
+        if create_lightning_invoice(15, "Epic Mirror Render"):
+            st.session_state.rune_points += 30
+            st.success("✅ Epic visual effect unlocked!")
+            
 # ====================== TAB 4: xAI COOKBOOK EXPLORER ======================
 with tab4:
     st.header("📖 xAI Cookbook Explorer")
     st.info("Function calling, multi-agent systems, structured outputs, and more — all woven into the lattice.")
 
     if st.button("Etch + Lightning Rarity Boost (21 sats)"):
-    if create_lightning_invoice(21, "Etch Rarity Boost"):
-        st.session_state.rune_points += 35
-        # then do the normal etch
-
+        if create_lightning_invoice(21, "Etch Rarity Boost"):
+            st.session_state.rune_points += 35
+            st.success("✅ Etched with Lightning + Rare Drop!")
+            
 # ====================== TAB 5: GROK VISION ======================
 with tab5:
     st.header("👁️ Grok Vision + Polyvagal Lens")
@@ -222,7 +224,7 @@ with tab5:
         if st.button("Run Aubie Vision Analysis"):
             st.success("**Aubie Vision Analysis:**\n- Polyvagal State: Ventral Vagal (Calm & Curious)\n- Antifragility Score: 9.1/10\n- Lesson: This image shows joyful absorption of physical uncertainty.")
     
-    i    if st.button("⚡ Pay 42 sats for Legendary Co-Creation Drop"):
+    if st.button("⚡ Pay 42 sats for Legendary Co-Creation Drop"):
         if create_lightning_invoice(42, "Legendary Co-Creation"):
             if "rune_points" not in st.session_state:
                 st.session_state.rune_points = 0
@@ -375,7 +377,7 @@ with tab8:
     **AUBIEETERNAL Rule:** Never teach or train in dorsal vagal state. Always co-regulate first.
     """)
 
-# ====================== TAB 9: FINAL — LIGHTNING + RARITY + NOSTR DETAILS ======================
+# ====================== TAB 9: FINAL CLEAN VERSION ======================
 with tab9:
     st.header("📚 Kid • Teen • Adolescent Lattice + Lightning Rune Economy")
     st.caption("Unified Economy • Real Lightning Payments • Nostr Social • Voice 2.0 • Full Rarity System")
@@ -390,7 +392,7 @@ with tab9:
         st.session_state.lightning_payments = []
         st.session_state.last_login = str(datetime.date.today())
 
-    # Daily login
+    # Daily login bonus
     today = str(datetime.date.today())
     if st.session_state.last_login != today:
         bonus = random.randint(15, 30)
@@ -419,7 +421,7 @@ with tab9:
                 st.balloons()
                 st.rerun()
 
-    # === REVISED LIGHTNING INVOICE FLOW (Clean + Log) ===
+    # === LIGHTNING INVOICE FUNCTION (local to tab for safety) ===
     def create_lightning_invoice(sats, memo="Reward boost"):
         st.info(f"**Lightning Invoice** — Pay **{sats} sats** for {memo}")
         invoice = f"lnbc{sats}u1p{random.randint(100000,999999)}...demo"
@@ -446,18 +448,18 @@ Include Lightning payment options for 2× rewards, full rune rarity system, Nost
                 st.error(str(e))
 
     if "curriculum_text" in st.session_state:
-    with st.expander("📖 Curriculum"):
-        st.markdown(st.session_state.curriculum_text)
-        st.download_button("📄 Download Markdown", 
-                          st.session_state.curriculum_text, 
-                          f"{kid_name}_Curriculum.md", "text/markdown")
+        with st.expander("📖 Curriculum"):
+            st.markdown(st.session_state.curriculum_text)
+            st.download_button("📄 Download Markdown", 
+                              st.session_state.curriculum_text, 
+                              f"{kid_name}_Curriculum.md", "text/markdown")
 
-        # === NEW PDF BUTTON ===
-        if st.button("📕 Download Beautiful PDF Curriculum"):
-            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name, st.session_state.curriculum_text)
-            st.download_button("Download PDF", pdf_buffer, 
-                              f"{kid_name}_Curriculum.pdf", "application/pdf")
-            
+            # PDF Button
+            if st.button("📕 Download Beautiful PDF Curriculum"):
+                pdf_buffer = generate_beautiful_curriculum_pdf(kid_name, st.session_state.curriculum_text)
+                st.download_button("Download PDF", pdf_buffer, 
+                                  f"{kid_name}_Curriculum.pdf", "application/pdf")
+
     st.divider()
 
     # === 5-WEEK CHALLENGES + LIGHTNING BOOST ===
@@ -494,7 +496,7 @@ Include Lightning payment options for 2× rewards, full rune rarity system, Nost
                                 st.balloons()
                                 st.rerun()
 
-    # === NEW: RUNE DROP MECHANICS EXPLAINER ===
+    # === RUNE DROP MECHANICS EXPLAINER ===
     with st.expander("📖 How Rune Drops Actually Work (Full Mechanics)", expanded=False):
         st.markdown("""
 **Base Drop Rates**
@@ -512,11 +514,9 @@ Include Lightning payment options for 2× rewards, full rune rarity system, Nost
 **Why Rarity Matters**
 - Higher rarity = bigger future multipliers + special Nostr "boost" when you share
 - Legendary runes unlock secret voice lines from Grok and permanent +10% streak bonus
-
-The rarer the rune, the stronger your antifragile future becomes.
 """)
 
-    # === NOSTR INTEGRATION DETAILS ===
+    # === NOSTR SOCIAL HUB ===
     st.subheader("📡 Nostr Social Hub + Integration Details")
     if st.button("📡 Share Latest Win to Nostr (with Lightning boost)", use_container_width=True):
         note = f"🧡 {kid_name} just earned {random.randint(40,90)} shards and is feeling antifragile! #AUBIETERNAL #RuneForge #WarEagleEternal"
@@ -533,14 +533,14 @@ The rarer the rune, the stronger your antifragile future becomes.
         }
         st.session_state.nostr_posts.append(event)
         st.json(event)
-        st.success("✅ Event created! Copy the JSON above and paste into nostrudel, Primal, or any Nostr client to broadcast for real.")
+        st.success("✅ Event created! Copy the JSON above and paste into nostrudel, Primal, or any Nostr client.")
 
     st.markdown("**Recent Nostr Posts**")
     for p in st.session_state.nostr_posts[-4:][::-1]:
         st.markdown(f"> {p['content']}  \n_<small>{p.get('ts', '')}</small>_")
 
-    # === VOICE + CHAT (kept polished) ===
-    #Voice section (same polished version as last response)
+    # === VOICE + CHAT ===
+    st.subheader("🎙️ Voice Co-Tutor 2.0")
     audio = st.audio_input("🎙️ Speak to Grok Co-Tutor")
     if audio:
         st.audio(audio)
@@ -549,9 +549,7 @@ The rarer the rune, the stronger your antifragile future becomes.
             st.session_state.chat_history = st.session_state.get("chat_history", [])
             st.session_state.chat_history.append({"role": "user", "content": f"🎤 {transcription}"})
             st.rerun()
-            
-    st.caption("Human + Grok + Lightning + Runes + Nostr + on-chain forever. No resets.")
-    #Chat interface (reused from before, enhanced)
+
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [{"role": "assistant", "content": f"Hi {kid_name}! I'm your Grok Co-Tutor. Talk to me about runes, the orange rope, or anything on your mind. 🎙️"}]
 
@@ -571,39 +569,38 @@ The rarer the rune, the stronger your antifragile future becomes.
                 st.rerun()
             except Exception as e:
                 st.error(str(e))
+
+    st.caption("Human + Grok + Lightning + Runes + Nostr + on-chain forever. No resets.")
                 
-# ====================== TAB 10: PARENT CURRICULUM (FINAL COMPLETE VERSION) ======================
+# ====================== TAB 10: PARENT CURRICULUM (CLEAN) ======================
 with tab10:
     st.header("👨‍👩‍👧 Parent Curriculum — Polyvagal + Antifragile + Attachment Parenting")
-st.caption("From toddlers to teens • Single parents • Grandparents • One-page reference")
+    st.caption("From toddlers to teens • Single parents • Grandparents • One-page reference")
 
-# ====================== PDF DOWNLOAD FOR PARENTS ======================
-st.subheader("📕 Download Full Parent Curriculum PDF")
+    # === PDF BUTTON ===
+    st.subheader("📕 Download Full Parent Curriculum PDF")
 
-col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        if st.button("📕 Download Full Parent Curriculum PDF (with Rarity Table)", type="primary"):
+            if "curriculum_text" in st.session_state:
+                kid_name_for_pdf = st.session_state.get("kid_name_final", "Gaby")
+                pdf_buffer = generate_beautiful_curriculum_pdf(kid_name_for_pdf, st.session_state.curriculum_text)
+                st.session_state.pdf_buffer = pdf_buffer
+                st.success("✅ PDF ready for download!")
+            else:
+                st.warning("Please generate the curriculum in the **Kid Lattice Curriculum** tab first.")
 
-with col1:
-    if st.button("📕 Download Full Parent Curriculum PDF (with Rarity Table)", type="primary"):
-        if "curriculum_text" in st.session_state:
-            # Use kid_name from session state or default
-            kid_name_for_pdf = st.session_state.get("kid_name_final", "Gaby")
-            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name_for_pdf, st.session_state.curriculum_text)
-            st.session_state.pdf_buffer = pdf_buffer  # store for download
-            st.success("✅ PDF ready for download!")
-        else:
-            st.warning("Please generate the curriculum in the **Kid Lattice Curriculum** tab first.")
+    if "pdf_buffer" in st.session_state:
+        with col2:
+            st.download_button(
+                label="📥 Download PDF",
+                data=st.session_state.pdf_buffer,
+                file_name=f"{st.session_state.get('kid_name_final', 'Gaby')}_Parent_Curriculum.pdf",
+                mime="application/pdf",
+                use_container_width=True
+            )
 
-# Show download button only after PDF is generated
-if "pdf_buffer" in st.session_state:
-    with col2:
-        st.download_button(
-            label="📥 Download PDF",
-            data=st.session_state.pdf_buffer,
-            file_name=f"{st.session_state.get('kid_name_final', 'Gaby')}_Parent_Curriculum.pdf",
-            mime="application/pdf",
-            use_container_width=True
-        )
-            
     # ====================== EXPANDED POLYVAGAL THEORY ======================
     st.subheader("🧬 Expanded Polyvagal Theory — Deep Science + Practice")
 
@@ -729,7 +726,7 @@ if "pdf_buffer" in st.session_state:
             from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
             from reportlab.lib import colors
             from reportlab.lib.units import inch
-            from reportlab.lib.enums import TA_CENTER, TA_LEFT
+            from reportlab.lib.enums import TA_CENTER
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(buffer, pagesize=letter, 
@@ -743,12 +740,10 @@ if "pdf_buffer" in st.session_state:
             body_style = ParagraphStyle('Body', parent=styles['Normal'], fontSize=8, leading=10)
             
             story = []
-
             story.append(Paragraph("AUBIEETERNAL — PARENT QUICK REFERENCE", title_style))
             story.append(Paragraph("Polyvagal + Antifragile + Attachment Parenting", styles['Normal']))
             story.append(Spacer(1, 8))
 
-            # Polyvagal States
             story.append(Paragraph("<b>POLYVAGAL STATES (Dr. Stephen Porges)</b>", heading_style))
             pv_data = [
                 ["State", "Signs", "Parent Response"],
@@ -771,7 +766,6 @@ if "pdf_buffer" in st.session_state:
             story.append(pv_table)
             story.append(Spacer(1, 8))
 
-            # Co-Regulation Techniques
             story.append(Paragraph("<b>10 CO-REGULATION TECHNIQUES</b>", heading_style))
             coreg = """1. Heart-to-Heart Breathing (2-3 min) • 2. 5-4-3-2-1 Grounding • 3. Name It to Tame It<br/>
             4. Physical Co-Regulation (hand on back, rocking) • 5. "We Can Do Hard Things" Mantra • 6. 90-Second Rule<br/>
@@ -779,7 +773,6 @@ if "pdf_buffer" in st.session_state:
             story.append(Paragraph(coreg, body_style))
             story.append(Spacer(1, 6))
 
-            # Antifragile Parenting
             story.append(Paragraph("<b>ANTIFRAGILE PARENTING</b>", heading_style))
             antifrag = """• Let your child struggle just enough to grow (with your support)<br/>
             • Celebrate effort, not just success • "This is hard AND we can do hard things"<br/>
@@ -787,14 +780,12 @@ if "pdf_buffer" in st.session_state:
             story.append(Paragraph(antifrag, body_style))
             story.append(Spacer(1, 6))
 
-            # Single Parent & Grandparent
             story.append(Paragraph("<b>SINGLE PARENT & GRANDPARENT WISDOM</b>", heading_style))
             single = """<b>Single Parents:</b> You are enough. Build your village. Quality over quantity. Celebrate small wins.<br/>
             <b>Grandparents:</b> Your calm presence is medicine. Share resilience stories. Be the steady anchor."""
             story.append(Paragraph(single, body_style))
             story.append(Spacer(1, 8))
 
-            # Final Message
             final = """<b>War Eagle Parent Message:</b> You are not raising a perfect child.<br/>
             You are raising a child who knows how to return to safety, face waves, and grow stronger because of them.<br/>
             <i>— AUBIEETERNAL v65.0 | War Eagle Eternal 🦅🐾</i>"""
@@ -816,7 +807,6 @@ if "pdf_buffer" in st.session_state:
 
     st.divider()
 
-    # ====================== FINAL MESSAGE ======================
     st.markdown("""
     **🦅 You are building something sacred.**
     
@@ -830,8 +820,7 @@ if "pdf_buffer" in st.session_state:
     
     War Eagle.<br/>
     You've got this. And we're right here with you. 🐾
-    """)
-# ====================== TAB 11: ASCENSION COUNCIL ======================
+    """)# ====================== TAB 11: ASCENSION COUNCIL ======================
 with tab11:
     st.header("🚀 Ascension Council — Native Grok 4.3 Multi-Agent Truth Oracle")
     st.markdown("**6 Specialized Agents • Voice Debate • On-Chain Verdict**")
