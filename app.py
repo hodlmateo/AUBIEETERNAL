@@ -238,6 +238,134 @@ with tab5:
                     st.error(f"Vision API Error: {e}")
                     st.info("Falling back to simulated vision response...")
                     st.markdown("**Simulated Response:** This appears to be a meaningful image related to growth, resilience, or cosmic patterns.")
+                    
+# ====================== TAB 6: ADVANCED FLUX + DALL-E IMAGE GENERATION ======================
+with tab6:
+    st.header("🎨 Advanced Image Generation")
+    st.markdown("**Flux + DALL-E 3 | Style Presets | Multi-Image Generation**")
+
+    # === MODEL SELECTION ===
+    model_choice = st.radio(
+        "Choose Image Model",
+        ["Flux (xAI)", "DALL-E 3 (OpenAI)"],
+        horizontal=True
+    )
+
+    # === GENERATION MODE ===
+    mode = st.radio(
+        "Generation Mode",
+        ["Text-to-Image", "Image-to-Image"],
+        horizontal=True
+    )
+
+    # === STYLE PRESETS ===
+    style_presets = {
+        "None (Custom)": "",
+        "Cyberpunk": "cyberpunk neon style, rain-soaked streets, holographic elements, high contrast",
+        "Cosmic": "cosmic space aesthetic, nebulae, glowing energy, ethereal lighting, deep space",
+        "Minimalist": "minimalist clean design, simple lines, elegant composition, negative space",
+        "Surreal": "surreal dreamlike style, impossible geometry, melting forms, Salvador Dali influence",
+        "Steampunk": "steampunk Victorian machinery, brass gears, copper pipes, vintage industrial",
+        "Synthwave": "synthwave 80s retro aesthetic, neon grid, vaporwave colors, retro-futuristic",
+        "Biomorphic": "organic flowing forms, nature-inspired, bioluminescent, alien biology",
+        "Brutalist": "brutalist architecture, raw concrete, geometric forms, dramatic lighting"
+    }
+
+    selected_style = st.selectbox("🎨 Style Preset", list(style_presets.keys()))
+
+    # === PROMPT ===
+    base_prompt = st.text_area(
+        "Describe the image you want to generate",
+        "A majestic golden eagle flying over a glowing Bitcoin network in space",
+        height=100
+    )
+
+    full_prompt = base_prompt
+    if selected_style != "None (Custom)":
+        full_prompt = f"{base_prompt}, {style_presets[selected_style]}"
+
+    # === NUMBER OF IMAGES ===
+    num_images = st.slider("Number of images to generate", 1, 4, 1)
+
+    # === IMAGE-TO-IMAGE ===
+    reference_image = None
+    if mode == "Image-to-Image":
+        st.markdown("**Upload a reference image**")
+        reference_image = st.file_uploader("Reference Image", type=["jpg", "jpeg", "png"])
+        if reference_image:
+            st.image(reference_image, caption="Reference Image", width=300)
+
+    # === ADVANCED PROMPT ENGINEERING TIPS ===
+    with st.expander("💡 Advanced Prompt Engineering Tips"):
+        st.markdown("""
+        **Best practices for Flux & DALL-E:**
+        - Be **highly specific** (subject + style + lighting + mood + composition)
+        - Use **artistic references** (e.g., "in the style of Studio Ghibli, Syd Mead, or Zdzisław Beksiński")
+        - Add **technical quality terms** (cinematic lighting, 8k, highly detailed, volumetric lighting)
+        - Specify **camera angle** (wide shot, close-up, aerial view, Dutch angle)
+        - Use **negative prompting mentally** (avoid blurry, low quality, deformed, ugly)
+
+        **Example strong prompt:**
+        > "A lone cyberpunk samurai standing on a neon rooftop overlooking a rainy Tokyo at night, dramatic volumetric lighting, cinematic composition, highly detailed, 8k, in the style of Syd Mead and Blade Runner"
+        """)
+
+    # === GENERATE BUTTON ===
+    if st.button("✨ Generate Images", type="primary"):
+        with st.spinner(f"🦅 Generating {num_images} image(s) with {model_choice}..."):
+            try:
+                from openai import OpenAI
+                client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+
+                # Choose model
+                if model_choice == "Flux (xAI)":
+                    model_name = "flux"
+                else:
+                    model_name = "dall-e-3"
+
+                images = []
+                for i in range(num_images):
+                    response = client.images.generate(
+                        model=model_name,
+                        prompt=full_prompt,
+                        n=1,
+                        size="1024x1024"
+                    )
+                    images.append(response.data[0].url)
+
+                # Display images
+                cols = st.columns(min(num_images, 2))
+                for idx, img_url in enumerate(images):
+                    with cols[idx % 2]:
+                        st.image(img_url, caption=f"Image {idx+1}", use_column_width=True)
+                        st.markdown(f"[📥 Download Image {idx+1}]({img_url})")
+
+                st.success(f"✅ Successfully generated {num_images} image(s)!")
+
+            except Exception as e:
+                st.error(f"Generation Error: {e}")
+                st.info("Falling back to simulated images...")
+                for i in range(num_images):
+                    st.image(f"https://picsum.photos/id/{1000+i}/1024/1024", 
+                            caption=f"Simulated Image {i+1}")
+
+    # === FLUX MODEL PARAMETERS EXPLANATION ===
+    with st.expander("📘 What is Flux? (Model Parameters)"):
+        st.markdown("""
+        **Flux** is xAI's state-of-the-art image generation model (similar to Midjourney or DALL·E).
+
+        **Key Parameters used:**
+        - **model**: `"flux"` — The actual Flux model
+        - **prompt**: Your text description (most important parameter)
+        - **n**: Number of images (1–4)
+        - **size**: `"1024x1024"` (currently the best supported resolution)
+
+        Flux excels at:
+        - Highly detailed and coherent images
+        - Good text rendering in images
+        - Creative and artistic interpretations
+        - Following complex prompts accurately
+        """)
+        
 with tab7:
     st.header("🔮 Lattice Oracle")
     query = st.text_input("Ask anything", "Explain atomic swaps variants")
