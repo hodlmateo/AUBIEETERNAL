@@ -367,10 +367,6 @@ elif page == "🚀 Ascension Council":
     if st.button("🗣️ Convene Council"):
         st.success("✅ Council convened! Truth Score: 9.2/10")
 
-# ====================== CLEAN PAGE ROUTING ======================
-if page == "🏠 Home / Status":
-    # Your fancy status box code here (already present)
-
 elif page == "🐾 Aubie Vision Oracle":
     st.header("🐾 Aubie Vision Oracle — Living Mascot (Real Grok Vision)")
     st.markdown("Upload any pet photo for **real Grok Vision** analysis.")
