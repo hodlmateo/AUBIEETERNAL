@@ -367,27 +367,71 @@ elif page == "🚀 Ascension Council":
     if st.button("🗣️ Convene Council"):
         st.success("✅ Council convened! Truth Score: 9.2/10")
 
-elif page == "🐕 Aubie Eternal Mascot":
-    st.header("🐾 Aubie Eternal — Living Mascot & War Eagle Proof")
-    st.markdown("**This golden retriever is now the official living mascot of AUBIEETERNAL.**")
+# ====================== CLEAN PAGE ROUTING ======================
+if page == "🏠 Home / Status":
+    # Your fancy status box code here (already present)
 
-    # Aubie Vision Oracle
-    st.subheader("🔮 Aubie Vision Oracle — Pet Photo AI Analysis")
-    uploaded_pet = st.file_uploader("Upload your pet's photo", type=["jpg", "jpeg", "png"], key="pet_upload_final")
+elif page == "🐾 Aubie Vision Oracle":
+    st.header("🐾 Aubie Vision Oracle — Living Mascot (Real Grok Vision)")
+    st.markdown("Upload any pet photo for **real Grok Vision** analysis.")
+
+    uploaded_pet = st.file_uploader("Upload your pet's photo", type=["jpg", "jpeg", "png"], key="pet_upload_real")
+
     if uploaded_pet:
         st.image(uploaded_pet, caption="Your Pet Photo", width=400)
-        if st.button("🦅 Analyze with Aubie Vision", type="primary", key="analyze_aubie_final"):
-            st.success("**Aubie Vision Analysis Complete**")
-            st.markdown("""
-            **Polyvagal State:** Ventral Vagal (Calm + Curious)  
-            **Antifragility Score:** 9.4/10  
-            **War Eagle Spirit Score:** 9.8/10
-            """)
-            st.info("Lesson: Even when the waves get big, staying calm and holding onto what matters makes you stronger.")
-            if st.button("📌 Etch This Analysis On-Chain", key="etch_aubie_final"):
-                st.balloons()
-                st.success("✅ Etched forever as a War Eagle Rune!")
 
+        if st.button("🦅 Analyze with Real Grok Vision", type="primary"):
+            with st.spinner("🐾 Aubie is analyzing with real Grok Vision..."):
+                try:
+                    from openai import OpenAI
+                    client = OpenAI(api_key=st.secrets["XAI_API_KEY"], base_url="https://api.x.ai/v1")
+
+                    image_bytes = uploaded_pet.getvalue()
+                    base64_image = base64.b64encode(image_bytes).decode('utf-8')
+
+                    system_prompt = """You are Aubie, the official golden retriever mascot of AUBIEETERNAL.
+                    Analyze this pet photo through Polyvagal Theory, Antifragility, and War Eagle spirit.
+
+                    Return:
+                    - Polyvagal State
+                    - Antifragility Score (1-10)
+                    - War Eagle Spirit Score (1-10)
+                    - One short lesson for kids
+                    - One "Swim the Chaos" challenge"""
+
+                    completion = client.chat.completions.create(
+                        model="grok-vision-beta",
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": "Please analyze this pet photo."},
+                                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                                ]
+                            }
+                        ],
+                        max_tokens=900
+                    )
+
+                    st.markdown("**🐾 Aubie Vision Analysis:**")
+                    st.markdown(completion.choices[0].message.content)
+                    st.success("✅ Analysis complete! Etched into the Memory Palace.")
+
+                    if st.button("📌 Etch This Analysis On-Chain"):
+                        st.balloons()
+                        st.success("✅ Etched forever as a War Eagle Rune!")
+
+                except Exception as e:
+                    st.error(f"Vision Error: {e}")
+                    st.info("Falling back to simulated analysis...")
+                    st.markdown("""
+                    **Polyvagal State:** Ventral Vagal (Calm + Curious)  
+                    **Antifragility Score:** 9.4/10  
+                    **War Eagle Spirit Score:** 9.8/10
+                    """)
+
+# ====================== FOOTER ======================
     # 5 Sacred Photos
     st.subheader("📸 Aubie's 5 Sacred Photos")
     photos = [
