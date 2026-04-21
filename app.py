@@ -56,6 +56,58 @@ html(ritual_html, height=0)
 st.title("🦅 AUBIEETERNAL v65.0 — FINAL ABSORBED")
 st.success("Coherence 1.000000 | Everything Absorbed | Polyvagal + Antifragility + Aubie Mascot + Grok Vision + Flux | War Eagle Eternal 🐾")
 
+# ====================== GLOBAL PDF GENERATOR ======================
+def generate_beautiful_curriculum_pdf(kid_name, curriculum_text):
+    from reportlab.lib.pagesizes import letter
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+    from reportlab.lib import colors
+    from reportlab.lib.units import inch
+    from io import BytesIO
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # Title
+    title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontSize=24, 
+                                  textColor=colors.HexColor('#1e40af'), spaceAfter=20)
+    story.append(Paragraph(f"🦅 {kid_name}'s Antifragile Lattice Curriculum", title_style))
+    story.append(Spacer(1, 20))
+
+    # Rarity Table
+    story.append(Paragraph("<b>Rune Rarity System</b>", styles['Heading2']))
+    rarity_data = [
+        ["Rarity", "Threshold", "Drop Chance", "Benefit"],
+        ["🧡 Common", "40-80", "~70%", "Steady progress"],
+        ["🔗 Rare", "120-160", "~25%", "1.25× multiplier"],
+        ["⚡ Epic", "200+", "~8%", "1.5× combo + special badge"],
+        ["🌌 Legendary", "320+", "~2%", "+120 shards + Nostr boost"],
+    ]
+    t = Table(rarity_data, colWidths=[1.5*inch, 1*inch, 1*inch, 2.5*inch])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#f0f9ff')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 30))
+
+    # Curriculum text
+    for line in curriculum_text.split('\n'):
+        story.append(Paragraph(line, styles['Normal']))
+        story.append(Spacer(1, 6))
+
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+    
 # ====================== GLOBAL TOGGLE ======================
 use_real_grok = st.checkbox("🦅 Use Real Grok API", value=False)
 if not use_real_grok:
@@ -397,10 +449,18 @@ Include Lightning payment options for 2× rewards, full rune rarity system, Nost
                 st.error(str(e))
 
     if "curriculum_text" in st.session_state:
-        with st.expander("📖 Curriculum"):
-            st.markdown(st.session_state.curriculum_text)
-            st.download_button("📄 Download", st.session_state.curriculum_text, f"{kid_name}_Curriculum.md")
+    with st.expander("📖 Curriculum"):
+        st.markdown(st.session_state.curriculum_text)
+        st.download_button("📄 Download Markdown", 
+                          st.session_state.curriculum_text, 
+                          f"{kid_name}_Curriculum.md", "text/markdown")
 
+        # === NEW PDF BUTTON ===
+        if st.button("📕 Download Beautiful PDF Curriculum"):
+            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name, st.session_state.curriculum_text)
+            st.download_button("Download PDF", pdf_buffer, 
+                              f"{kid_name}_Curriculum.pdf", "application/pdf")
+            
     st.divider()
 
     # === 5-WEEK CHALLENGES + LIGHTNING BOOST ===
@@ -518,8 +578,23 @@ The rarer the rune, the stronger your antifragile future becomes.
 # ====================== TAB 10: PARENT CURRICULUM (FINAL COMPLETE VERSION) ======================
 with tab10:
     st.header("👨‍👩‍👧 Parent Curriculum — Polyvagal + Antifragile + Attachment Parenting")
-    st.markdown("**From toddlers to teens • Single parents • Grandparents • One-page reference**")
+st.caption("From toddlers to teens • Single parents • Grandparents • One-page reference")
 
+# === PDF BUTTON ===
+col1, col2 = st.columns([2, 1])
+with col1:
+    if st.button("📕 Download Full Parent Curriculum PDF (with Rarity Table)", type="primary"):
+        if "curriculum_text" in st.session_state:
+            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name, st.session_state.curriculum_text)
+            st.download_button(
+                label="📥 Download PDF",
+                data=pdf_buffer,
+                file_name=f"{kid_name}_Parent_Curriculum.pdf",
+                mime="application/pdf"
+            )
+        else:
+            st.warning("Generate the curriculum in the **Kid Lattice Curriculum** tab first for the full PDF.")
+            
     # ====================== EXPANDED POLYVAGAL THEORY ======================
     st.subheader("🧬 Expanded Polyvagal Theory — Deep Science + Practice")
 
