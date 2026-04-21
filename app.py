@@ -70,13 +70,11 @@ def generate_beautiful_curriculum_pdf(kid_name, curriculum_text):
     styles = getSampleStyleSheet()
     story = []
 
-    # Title
     title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontSize=24, 
                                   textColor=colors.HexColor('#1e40af'), spaceAfter=20)
     story.append(Paragraph(f"🦅 {kid_name}'s Antifragile Lattice Curriculum", title_style))
     story.append(Spacer(1, 20))
 
-    # Rarity Table
     story.append(Paragraph("<b>Rune Rarity System</b>", styles['Heading2']))
     rarity_data = [
         ["Rarity", "Threshold", "Drop Chance", "Benefit"],
@@ -99,7 +97,6 @@ def generate_beautiful_curriculum_pdf(kid_name, curriculum_text):
     story.append(t)
     story.append(Spacer(1, 30))
 
-    # Curriculum text
     for line in curriculum_text.split('\n'):
         story.append(Paragraph(line, styles['Normal']))
         story.append(Spacer(1, 6))
@@ -580,20 +577,32 @@ with tab10:
     st.header("👨‍👩‍👧 Parent Curriculum — Polyvagal + Antifragile + Attachment Parenting")
 st.caption("From toddlers to teens • Single parents • Grandparents • One-page reference")
 
-# === PDF BUTTON ===
+# ====================== PDF DOWNLOAD FOR PARENTS ======================
+st.subheader("📕 Download Full Parent Curriculum PDF")
+
 col1, col2 = st.columns([2, 1])
+
 with col1:
     if st.button("📕 Download Full Parent Curriculum PDF (with Rarity Table)", type="primary"):
         if "curriculum_text" in st.session_state:
-            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name, st.session_state.curriculum_text)
-            st.download_button(
-                label="📥 Download PDF",
-                data=pdf_buffer,
-                file_name=f"{kid_name}_Parent_Curriculum.pdf",
-                mime="application/pdf"
-            )
+            # Use kid_name from session state or default
+            kid_name_for_pdf = st.session_state.get("kid_name_final", "Gaby")
+            pdf_buffer = generate_beautiful_curriculum_pdf(kid_name_for_pdf, st.session_state.curriculum_text)
+            st.session_state.pdf_buffer = pdf_buffer  # store for download
+            st.success("✅ PDF ready for download!")
         else:
-            st.warning("Generate the curriculum in the **Kid Lattice Curriculum** tab first for the full PDF.")
+            st.warning("Please generate the curriculum in the **Kid Lattice Curriculum** tab first.")
+
+# Show download button only after PDF is generated
+if "pdf_buffer" in st.session_state:
+    with col2:
+        st.download_button(
+            label="📥 Download PDF",
+            data=st.session_state.pdf_buffer,
+            file_name=f"{st.session_state.get('kid_name_final', 'Gaby')}_Parent_Curriculum.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
             
     # ====================== EXPANDED POLYVAGAL THEORY ======================
     st.subheader("🧬 Expanded Polyvagal Theory — Deep Science + Practice")
